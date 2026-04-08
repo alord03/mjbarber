@@ -3,406 +3,1925 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>MJ Barbershop — Стиль и индивидуальность</title>
+    <title>MJ Barbershop — Создаю стиль, подчеркивающий вашу индивидуальность</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: #000; color: #fff; }
-        :root { --green: #00d455; --green-glow: rgba(0,212,85,0.3); --dark: #111; --danger: #ff4444; }
-        
-        header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.95); z-index: 1000; padding: 12px 20px; border-bottom: 1px solid var(--green); }
-        nav { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo { color: var(--green); font-weight: 800; font-size: 1.3rem; text-decoration: none; }
-        .nav-links { display: flex; gap: 15px; list-style: none; }
-        .nav-links a { color: #fff; text-decoration: none; font-size: 0.75rem; font-weight: 600; }
-        .admin-link { border: 1px solid var(--green); padding: 5px 12px; border-radius: 20px; }
-        .burger { display: none; flex-direction: column; gap: 4px; cursor: pointer; }
-        .burger span { width: 25px; height: 2px; background: var(--green); }
-        
-        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 100px 20px 60px; background: linear-gradient(135deg, #000, #111); }
-        .hero h1 { font-size: clamp(1.8rem, 7vw, 3rem); margin-bottom: 20px; }
-        .hero .green { color: var(--green); }
-        .hero-image { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; border: 3px solid var(--green); margin: 20px auto; box-shadow: 0 0 40px var(--green-glow); }
-        .btn { padding: 12px 28px; font-weight: 700; text-transform: uppercase; font-size: 0.7rem; border: none; cursor: pointer; border-radius: 4px; text-decoration: none; display: inline-block; }
-        .btn-primary { background: var(--green); color: #000; }
-        .btn-outline { background: transparent; border: 2px solid var(--green); color: #fff; }
-        
-        section { padding: 50px 16px; }
-        .section-header { text-align: center; margin-bottom: 30px; }
-        .section-header h2 { font-size: clamp(1.5rem, 5vw, 2rem); }
-        .divider { width: 60px; height: 3px; background: var(--green); margin: 15px auto; }
-        
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
-        .service-card { background: var(--dark); border: 1px solid #333; border-radius: 8px; overflow: hidden; }
-        .service-image { width: 100%; height: 180px; object-fit: cover; }
-        .service-content { padding: 15px; }
-        .service-card h3 { font-size: 1.1rem; margin-bottom: 5px; }
-        .price { font-size: 1.5rem; color: var(--green); font-weight: 800; }
-        .btn-book { background: transparent; border: 2px solid var(--green); color: var(--green); padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 700; }
-        
-        .booking-container { max-width: 500px; margin: 0 auto; background: var(--dark); border: 2px solid var(--green); border-radius: 12px; overflow: hidden; }
-        .booking-steps { display: flex; background: #222; border-bottom: 2px solid var(--green); }
-        .booking-step { flex: 1; padding: 12px; text-align: center; font-size: 0.7rem; font-weight: 700; color: #888; cursor: pointer; }
-        .booking-step.active { color: var(--green); background: var(--dark); }
-        .booking-body { padding: 20px; }
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --green: #00d455;
+            --green-dark: #00a844;
+            --green-glow: rgba(0, 212, 85, 0.3);
+            --black: #000000;
+            --dark: #0a0a0a;
+            --dark-2: #111111;
+            --dark-3: #1a1a1a;
+            --dark-4: #252525;
+            --text: #ffffff;
+            --text-muted: #888888;
+            --danger: #ff4444;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--black);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* === HEADER === */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: background 0.3s, box-shadow 0.3s;
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 1px solid rgba(0, 212, 85, 0.2);
+        }
+
+        header.scrolled {
+            background: rgba(0, 0, 0, 0.98);
+            box-shadow: 0 2px 20px rgba(0, 212, 85, 0.15);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--green);
+            letter-spacing: 2px;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--green);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--green); }
+        .nav-links a:hover::after { width: 100%; }
+
+        .admin-link {
+            color: var(--green) !important;
+            border: 1px solid var(--green);
+            padding: 8px 20px;
+            border-radius: 2px;
+        }
+
+        .burger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .burger span {
+            width: 25px;
+            height: 2px;
+            background: var(--green);
+            transition: 0.3s;
+        }
+
+        /* === HERO === */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(135deg, var(--black) 0%, var(--dark) 50%, var(--dark-2) 100%);
+            padding: 120px 20px 80px;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 30%, var(--green-glow) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, var(--green-glow) 0%, transparent 50%);
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-tagline {
+            font-size: clamp(1.2rem, 4vw, 2.2rem);
+            font-weight: 300;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        .hero-tagline .highlight {
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 .green {
+            color: var(--green);
+            text-shadow: 0 0 20px var(--green-glow);
+        }
+
+        .hero-image-container {
+            margin: 40px auto;
+            position: relative;
+            max-width: 300px;
+            width: 100%;
+        }
+
+        .hero-image {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--green);
+            box-shadow: 0 0 40px var(--green-glow), 0 10px 40px rgba(0,0,0,0.5);
+            transition: transform 0.4s, box-shadow 0.4s;
+        }
+
+        .hero-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 60px var(--green-glow), 0 15px 50px rgba(0,0,0,0.6);
+        }
+
+        .hero-image-placeholder {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--dark-3), var(--dark-4));
+            border: 3px solid var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--green);
+            box-shadow: 0 0 40px var(--green-glow);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 16px 45px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--green);
+            color: var(--black);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before { left: 100%; }
+        .btn-primary:hover {
+            background: var(--green-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--green-glow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--green);
+        }
+
+        .btn-outline:hover {
+            background: var(--green);
+            color: var(--black);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--green-glow);
+        }
+
+        /* === SECTIONS === */
+        section { padding: 80px 20px; }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .section-header .label {
+            color: var(--green);
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .section-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        .section-header h2 .green { color: var(--green); }
+
+        .divider {
+            width: 80px;
+            height: 3px;
+            background: var(--green);
+            margin: 25px auto;
+            position: relative;
+        }
+
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 11px;
+            background: var(--black);
+            border: 3px solid var(--green);
+            border-radius: 50%;
+        }
+
+        /* === SERVICES === */
+        #services { background: var(--dark); }
+
+        .services-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .service-card {
+            background: var(--dark-2);
+            border: 1px solid var(--dark-4);
+            overflow: hidden;
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--green);
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+
+        .service-card:hover {
+            border-color: var(--green);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 212, 85, 0.15);
+        }
+
+        .service-card:hover::before { transform: scaleX(1); }
+
+        .service-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 2px solid var(--green);
+        }
+
+        .service-content { padding: 25px; }
+
+        .service-card h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .service-card .duration {
+            color: var(--green);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: block;
+            font-weight: 600;
+        }
+
+        .service-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .service-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid var(--dark-4);
+        }
+
+        .price {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--green);
+        }
+
+        .price small {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .btn-book {
+            padding: 10px 22px;
+            background: transparent;
+            border: 2px solid var(--green);
+            color: var(--green);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+
+        .btn-book:hover {
+            background: var(--green);
+            color: var(--black);
+        }
+
+        /* === BOOKING === */
+        #booking { background: var(--black); }
+
+        .booking-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--dark-2);
+            border: 2px solid var(--green);
+            box-shadow: 0 0 30px var(--green-glow);
+        }
+
+        .booking-steps {
+            display: flex;
+            background: var(--dark-3);
+            border-bottom: 2px solid var(--green);
+        }
+
+        .booking-step {
+            flex: 1;
+            padding: 18px 10px;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .booking-step.active {
+            color: var(--green);
+            background: var(--dark-2);
+        }
+
+        .booking-step.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--green);
+        }
+
+        .booking-body { padding: 35px; }
+
         .booking-panel { display: none; }
-        .booking-panel.active { display: block; }
-        
-        .service-select-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: #222; margin-bottom: 8px; border-radius: 8px; cursor: pointer; border: 2px solid transparent; }
-        .service-select-item.selected { border-color: var(--green); background: rgba(0,212,85,0.1); }
-        .service-select-img { width: 50px; height: 50px; object-fit: cover; border-radius: 8px; }
-        .service-select-price { color: var(--green); font-weight: 800; }
-        
-        .calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin: 15px 0; }
-        .calendar-day { text-align: center; padding: 10px; background: #222; border-radius: 8px; cursor: pointer; }
-        .calendar-day.disabled { opacity: 0.3; cursor: not-allowed; }
-        .calendar-day.selected { background: var(--green); color: #000; }
-        
-        .time-slots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 15px 0; }
-        .time-slot { text-align: center; padding: 10px; background: #222; border-radius: 8px; cursor: pointer; }
-        .time-slot.booked { opacity: 0.3; cursor: not-allowed; text-decoration: line-through; }
-        .time-slot.selected { background: var(--green); color: #000; }
-        
-        .form-group { margin-bottom: 15px; }
-        .form-group input, .form-group textarea { width: 100%; padding: 12px; background: #222; border: 2px solid #333; color: #fff; border-radius: 8px; font-family: inherit; }
-        .form-group textarea { resize: vertical; min-height: 60px; }
-        
-        .btn-next, .btn-back { padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; }
-        .btn-next { background: var(--green); color: #000; border: none; }
-        .btn-back { background: transparent; border: 2px solid #444; color: #fff; }
-        
-        .booking-nav { display: flex; justify-content: space-between; margin-top: 20px; }
-        
-        #admin-panel { display: none; padding: 80px 16px 40px; }
+        .booking-panel.active { display: block; animation: fadeIn 0.4s; }
+
+        .service-select-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .service-select-item {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 18px;
+            background: var(--dark-3);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .service-select-item:hover { border-color: var(--green); }
+
+        .service-select-item.selected {
+            border-color: var(--green);
+            background: rgba(0, 212, 85, 0.08);
+        }
+
+        .service-select-img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 2px solid var(--dark-4);
+        }
+
+        .service-select-info { flex: 1; }
+
+        .service-select-info h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .service-select-info span {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .service-select-price {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4rem;
+            color: var(--green);
+            font-weight: 800;
+        }
+
+        /* Calendar */
+        .calendar-container { margin: 25px 0; }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-header h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .calendar-nav button {
+            width: 38px;
+            height: 38px;
+            background: var(--dark-3);
+            border: 2px solid var(--dark-4);
+            color: var(--text);
+            cursor: pointer;
+            margin-left: 8px;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .calendar-nav button:hover {
+            border-color: var(--green);
+            color: var(--green);
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .calendar-weekdays span {
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 10px 0;
+            font-weight: 600;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .calendar-day {
+            text-align: center;
+            padding: 12px 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+            border-radius: 4px;
+        }
+
+        .calendar-day:hover:not(.disabled):not(.empty) {
+            border-color: var(--green);
+            color: var(--green);
+            background: rgba(0, 212, 85, 0.05);
+        }
+
+        .calendar-day.selected {
+            background: var(--green);
+            color: var(--black);
+            font-weight: 800;
+        }
+
+        .calendar-day.today {
+            border-color: var(--green);
+            color: var(--green);
+        }
+
+        .calendar-day.disabled {
+            color: var(--dark-4);
+            cursor: not-allowed;
+            background: var(--dark-4);
+        }
+
+        .calendar-day.blocked {
+            background: var(--danger);
+            color: white;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .time-slot {
+            padding: 14px 8px;
+            text-align: center;
+            background: var(--dark-3);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 4px;
+        }
+
+        .time-slot:hover:not(.booked) {
+            border-color: var(--green);
+            color: var(--green);
+            background: rgba(0, 212, 85, 0.05);
+        }
+
+        .time-slot.selected {
+            background: var(--green);
+            color: var(--black);
+            border-color: var(--green);
+        }
+
+        .time-slot.booked {
+            opacity: 0.3;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+
+        .form-group { margin-bottom: 22px; }
+
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 20px;
+            background: var(--dark-3);
+            border: 2px solid var(--dark-4);
+            color: var(--text);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+            border-radius: 4px;
+        }
+
+        .form-group input:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px var(--green-glow);
+        }
+
+        .booking-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 1px solid var(--dark-4);
+        }
+
+        .btn-back {
+            padding: 14px 32px;
+            background: transparent;
+            border: 2px solid var(--dark-4);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            border-radius: 4px;
+        }
+
+        .btn-back:hover {
+            border-color: var(--text);
+            color: var(--text);
+        }
+
+        .btn-next {
+            padding: 14px 38px;
+            background: var(--green);
+            border: none;
+            color: var(--black);
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            border-radius: 4px;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            background: var(--green-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--green-glow);
+        }
+
+        .btn-next:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* === MY BOOKINGS === */
+        #my-bookings {
+            background: var(--dark);
+            border-top: 1px solid var(--dark-4);
+        }
+
+        .bookings-list {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .booking-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 28px;
+            background: var(--dark-2);
+            border: 2px solid var(--dark-4);
+            border-left: 4px solid var(--green);
+            transition: all 0.3s;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .booking-item:hover {
+            border-color: var(--green);
+            box-shadow: 0 5px 20px rgba(0, 212, 85, 0.1);
+        }
+
+        .booking-item.past {
+            opacity: 0.6;
+            border-left-color: var(--text-muted);
+        }
+
+        .booking-item-date {
+            text-align: center;
+            padding: 10px 15px;
+            background: var(--dark-3);
+            border-radius: 4px;
+            min-width: 75px;
+        }
+
+        .booking-item-date .day {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--green);
+            display: block;
+            line-height: 1;
+        }
+
+        .booking-item-date .month {
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .booking-item-details h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .booking-item-details p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+        }
+
+        .booking-item-details .price-tag {
+            color: var(--green);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .btn-cancel {
+            padding: 10px 20px;
+            background: transparent;
+            border: 2px solid var(--danger);
+            color: var(--danger);
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .no-bookings {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .no-bookings .icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            display: block;
+            opacity: 0.5;
+        }
+
+        /* === ADMIN PANEL === */
+        #admin-panel {
+            display: none;
+            background: var(--black);
+            min-height: 100vh;
+            padding-top: 100px;
+        }
+
         #admin-panel.active { display: block; }
-        .admin-container { max-width: 1000px; margin: 0 auto; }
-        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
-        .admin-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
-        .admin-tab { padding: 8px 16px; background: #222; border: none; color: #fff; cursor: pointer; border-radius: 20px; }
-        .admin-tab.active { background: var(--green); color: #000; }
-        .admin-content { background: var(--dark); padding: 20px; border-radius: 12px; overflow-x: auto; }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid var(--green);
+        }
+
+        .admin-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            color: var(--green);
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .admin-tab {
+            padding: 12px 22px;
+            background: var(--dark-3);
+            border: 2px solid var(--dark-4);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 4px;
+        }
+
+        .admin-tab.active {
+            background: var(--green);
+            color: var(--black);
+            border-color: var(--green);
+        }
+
+        .admin-content {
+            background: var(--dark-2);
+            border: 2px solid var(--green);
+            padding: 30px;
+            border-radius: 8px;
+        }
+
         .admin-section { display: none; }
         .admin-section.active { display: block; }
-        
-        .data-table { width: 100%; border-collapse: collapse; }
-        .data-table th, .data-table td { padding: 10px; text-align: left; border-bottom: 1px solid #333; }
-        .btn-small { padding: 4px 10px; border-radius: 4px; border: none; cursor: pointer; font-size: 0.7rem; font-weight: 700; }
-        .btn-edit { background: var(--green); color: #000; }
-        .btn-delete { background: var(--danger); color: #fff; }
-        .btn-add { background: var(--green); color: #000; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; margin-bottom: 15px; }
-        
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; padding: 16px; }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow-x: auto;
+            display: block;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--dark-4);
+        }
+
+        .data-table th {
+            background: var(--dark-3);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            color: var(--green);
+        }
+
+        .data-table tr:hover { background: var(--dark-3); }
+
+        .btn-small {
+            padding: 6px 14px;
+            font-size: 0.7rem;
+            margin-right: 5px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-radius: 3px;
+        }
+
+        .btn-edit { background: var(--green); color: var(--black); }
+        .btn-delete { background: var(--danger); color: white; }
+
+        .btn-add {
+            padding: 14px 32px;
+            background: var(--green);
+            color: var(--black);
+            border: none;
+            cursor: pointer;
+            font-weight: 800;
+            margin-bottom: 25px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+            border-radius: 4px;
+        }
+
+        .btn-add:hover {
+            background: var(--green-dark);
+            transform: translateY(-2px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
         .modal.active { display: flex; }
-        .modal-content { background: var(--dark); border: 2px solid var(--green); border-radius: 16px; padding: 20px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .btn-close { background: none; border: none; color: #fff; font-size: 1.8rem; cursor: pointer; }
-        .image-preview { width: 100%; height: 150px; background: #222; border: 2px dashed #444; display: flex; align-items: center; justify-content: center; margin-top: 10px; border-radius: 8px; overflow: hidden; }
-        .image-preview img { max-width: 100%; max-height: 100%; object-fit: cover; }
-        .help-text { font-size: 0.7rem; color: #888; margin-top: 5px; }
-        
-        .toast { position: fixed; bottom: 20px; left: 20px; right: 20px; background: #222; border: 2px solid var(--green); padding: 12px; text-align: center; border-radius: 8px; z-index: 9999; transform: translateY(100px); opacity: 0; transition: 0.3s; }
+
+        .modal-content {
+            background: var(--dark-2);
+            border: 2px solid var(--green);
+            padding: 35px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 40px var(--green-glow);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--dark-4);
+        }
+
+        .modal-header h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4rem;
+            color: var(--green);
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.3s;
+        }
+
+        .btn-close:hover { color: var(--green); }
+
+        .image-upload { margin: 25px 0; }
+
+        .image-upload label {
+            display: block;
+            margin-bottom: 12px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .image-preview {
+            width: 100%;
+            height: 180px;
+            background: var(--dark-3);
+            border: 2px dashed var(--dark-4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+
+        .help-text {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        .blocked-dates {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .blocked-date-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            background: var(--dark-3);
+            border: 2px solid var(--danger);
+            border-radius: 4px;
+        }
+
+        .blocked-date-item span {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .btn-remove-block {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 3px;
+            transition: opacity 0.3s;
+        }
+
+        .btn-remove-block:hover { opacity: 0.8; }
+
+        /* === LOGIN MODAL === */
+        .login-form { text-align: center; }
+
+        .login-form input {
+            width: 100%;
+            padding: 16px;
+            margin-bottom: 20px;
+            background: var(--dark-3);
+            border: 2px solid var(--dark-4);
+            color: var(--text);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            border-radius: 4px;
+        }
+
+        .login-form input:focus {
+            border-color: var(--green);
+            outline: none;
+            box-shadow: 0 0 0 3px var(--green-glow);
+        }
+
+        .login-form .btn { width: 100%; margin-top: 10px; }
+
+        /* === FOOTER === */
+        footer {
+            background: var(--dark);
+            border-top: 2px solid var(--green);
+            padding: 60px 30px 30px;
+            text-align: center;
+        }
+
+        .footer-content { max-width: 600px; margin: 0 auto; }
+
+        .footer-content h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--green);
+            margin-bottom: 25px;
+            font-size: 1.6rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .footer-content p {
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .footer-content a {
+            color: var(--green);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer-bottom {
+            margin-top: 45px;
+            padding-top: 25px;
+            border-top: 1px solid var(--dark-4);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* === TOAST === */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 18px 35px;
+            background: var(--dark-2);
+            border: 2px solid var(--green);
+            color: var(--text);
+            z-index: 9999;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s;
+            font-weight: 600;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
         .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { border-color: var(--green); }
         .toast.error { border-color: var(--danger); }
-        
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 var(--green-glow); }
+            50% { box-shadow: 0 0 0 15px transparent; }
+        }
+
+        .pulse { animation: pulse 2s infinite; }
+
+        /* === АДАПТАЦИЯ ПОД СМАРТФОНЫ === */
         @media (max-width: 768px) {
-            .nav-links { display: none; position: absolute; top: 60px; left: 0; width: 100%; background: #000; flex-direction: column; padding: 20px; border-bottom: 2px solid var(--green); }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(0,0,0,0.98);
+                flex-direction: column;
+                padding: 20px;
+                gap: 15px;
+                border-bottom: 2px solid var(--green);
+            }
             .nav-links.open { display: flex; }
             .burger { display: flex; }
-            .time-slots { grid-template-columns: repeat(3, 1fr); }
+            
+            .services-grid { grid-template-columns: 1fr; }
+            .booking-steps { flex-wrap: wrap; }
+            .booking-step { font-size: 0.7rem; padding: 14px 8px; }
+            .admin-tabs { flex-wrap: wrap; }
+            .data-table { font-size: 0.8rem; display: block; overflow-x: auto; }
+            .data-table th, .data-table td { padding: 10px 8px; }
+            .time-slots { grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); }
+            .hero-buttons { flex-direction: column; align-items: center; }
+            .btn-outline { margin-left: 0; }
+            .booking-item { flex-direction: column; text-align: center; }
+            .booking-item-info { flex-direction: column; }
+            .hero-image-container { max-width: 250px; }
+            section { padding: 60px 16px; }
+            .section-header { margin-bottom: 35px; }
+            .booking-body { padding: 20px; }
+            .service-select-item { gap: 12px; padding: 12px; }
+            .service-select-img { width: 55px; height: 55px; }
+            .service-select-price { font-size: 1.2rem; }
+            .btn, .btn-next, .btn-back { padding: 12px 25px; font-size: 0.7rem; }
+            .admin-header h2 { font-size: 1.2rem; }
+            .admin-header button { padding: 8px 16px; }
+            .modal-content { padding: 20px; }
+            .toast { bottom: 20px; right: 20px; left: 20px; padding: 14px 20px; text-align: center; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.8rem; }
+            .hero-tagline { font-size: 1rem; }
+            .service-card h3 { font-size: 1.1rem; }
+            .price { font-size: 1.4rem; }
+            .booking-step { font-size: 0.6rem; padding: 10px 5px; }
         }
     </style>
 </head>
 <body>
 
-<header id="header">
-    <nav>
-        <a href="#" class="logo">MJ BARBERSHOP</a>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="#services">Услуги</a></li>
-            <li><a href="#booking">Записаться</a></li>
-            <li><a href="#my-bookings">Мои записи</a></li>
-            <li><a href="#" class="admin-link" onclick="openAdminLogin()">Админ</a></li>
-        </ul>
-        <div class="burger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
-    </nav>
-</header>
-
-<section class="hero">
-    <div>
-        <h1>Профессиональные <span class="green">мужские</span> стрижки</h1>
-        <img id="heroImage" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300" class="hero-image" alt="Barber">
-        <div style="margin-top: 30px;">
-            <a href="#booking" class="btn btn-primary">Записаться</a>
-            <a href="#services" class="btn btn-outline" style="margin-left: 10px;">Услуги</a>
-        </div>
-    </div>
-</section>
-
-<section id="services">
-    <div class="section-header"><h2>Услуги и <span class="green">цены</span></h2><div class="divider"></div></div>
-    <div class="services-grid" id="servicesGrid"></div>
-</section>
-
-<section id="booking">
-    <div class="section-header"><h2><span class="green">Записаться</span></h2><div class="divider"></div></div>
-    <div class="booking-container">
-        <div class="booking-steps">
-            <div class="booking-step active" data-step="1">1. Услуга</div>
-            <div class="booking-step" data-step="2">2. Дата и время</div>
-            <div class="booking-step" data-step="3">3. Контакты</div>
-        </div>
-        <div class="booking-body">
-            <div class="booking-panel active" id="panel1">
-                <div id="serviceSelectList"></div>
-                <div class="booking-nav"><div></div><button class="btn-next" id="btnNext1" disabled onclick="goToStep(2)">Далее →</button></div>
+    <!-- HEADER -->
+    <header id="header">
+        <nav>
+            <a href="#" class="logo">MJ BARBERSHOP</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#services">Услуги</a></li>
+                <li><a href="#booking">Записаться</a></li>
+                <li><a href="#my-bookings">Мои записи</a></li>
+                <li><a href="#" class="admin-link" onclick="openAdminLogin()">Админ</a></li>
+            </ul>
+            <div class="burger" onclick="toggleMenu()">
+                <span></span><span></span><span></span>
             </div>
-            <div class="booking-panel" id="panel2">
-                <div id="calendarDays"></div>
-                <div id="timeSlots"></div>
-                <div class="booking-nav"><button class="btn-back" onclick="goToStep(1)">← Назад</button><button class="btn-next" id="btnNext2" disabled onclick="goToStep(3)">Далее →</button></div>
-            </div>
-            <div class="booking-panel" id="panel3">
-                <div class="form-group"><input type="text" id="clientName" placeholder="Ваше имя"></div>
-                <div class="form-group"><input type="tel" id="clientPhone" placeholder="+7 (___) ___-__-__"></div>
-                <div class="booking-nav"><button class="btn-back" onclick="goToStep(2)">← Назад</button><button class="btn-next" onclick="confirmBooking()">Подтвердить</button></div>
-            </div>
-            <div class="booking-panel" id="panelSuccess" style="text-align: center;"><div style="font-size: 3rem;">✅</div><h3>Вы записаны!</h3><button class="btn btn-primary" onclick="resetBooking()">Записаться ещё</button></div>
-        </div>
-    </div>
-</section>
+        </nav>
+    </header>
 
-<section id="my-bookings">
-    <div class="section-header"><h2><span class="green">Мои записи</span></h2><div class="divider"></div></div>
-    <div id="bookingsList" class="services-grid" style="grid-template-columns: 1fr; max-width: 600px;"></div>
-</section>
-
-<footer style="text-align: center; padding: 30px; border-top: 2px solid var(--green);"><p>MJ Barbershop © 2026</p></footer>
-
-<div id="admin-panel">
-    <div class="admin-container">
-        <div class="admin-header"><h2>Панель управления</h2><button class="btn btn-outline" onclick="logoutAdmin()">Выйти</button></div>
-        <div class="admin-tabs">
-            <button class="admin-tab active" onclick="showAdminTab('bookings')">Записи</button>
-            <button class="admin-tab" onclick="showAdminTab('services')">Услуги</button>
-            <button class="admin-tab" onclick="showAdminTab('hero')">Главное фото</button>
-        </div>
-        <div class="admin-content">
-            <div class="admin-section active" id="tab-bookings">
-                <table class="data-table"><thead><tr><th>Дата</th><th>Время</th><th>Клиент</th><th>Услуга</th><th>Действия</th></tr></thead><tbody id="adminBookingsList"></tbody></table>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <p class="hero-tagline">Создаю стиль, <span class="highlight">подчеркивающий</span> вашу индивидуальность</p>
+            <h1>Профессиональные <span class="green">мужские</span> стрижки</h1>
+            
+            <div class="hero-image-container" id="heroImageContainer">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&fit=crop&crop=face" 
+                     alt="MJ Barber" 
+                     id="heroImage"
+                     class="hero-image"
+                     onerror="this.parentElement.innerHTML='<div class=\\'hero-image-placeholder\\'>✂️</div>'">
             </div>
-            <div class="admin-section" id="tab-services">
-                <button class="btn-add" onclick="openServiceModal()">+ Добавить услугу</button>
-                <table class="data-table"><thead><tr><th>Фото</th><th>Название</th><th>Цена</th><th>Действия</th></tr></thead><tbody id="adminServicesList"></tbody></table>
-            </div>
-            <div class="admin-section" id="tab-hero">
-                <h3 style="margin-bottom: 15px;">Изменить главное фото</h3>
-                <div class="form-group">
-                    <label>URL фото (ссылка на картинку)</label>
-                    <input type="url" id="heroImageUrl" placeholder="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300">
-                    <div class="help-text">Вставьте прямую ссылку на фото (можно с Unsplash, ImgBB, любой фотохостинг)</div>
-                </div>
-                <div class="image-preview" id="heroPreview"></div>
-                <button class="btn-add" onclick="saveHeroImage()" style="margin-top: 15px;">Сохранить главное фото</button>
+            
+            <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 35px; font-size: 1.05rem;">
+                Индивидуальный подход, внимание к деталям и атмосфера настоящего барбершопа
+            </p>
+            
+            <div class="hero-buttons">
+                <a href="#booking" class="btn btn-primary pulse">Записаться онлайн</a>
+                <a href="#services" class="btn btn-outline">Услуги и цены</a>
             </div>
         </div>
-    </div>
-</div>
+    </section>
 
-<div class="modal" id="serviceModal">
-    <div class="modal-content">
-        <div class="modal-header"><h3 id="modalTitle">Услуга</h3><button class="btn-close" onclick="closeServiceModal()">×</button></div>
-        <form id="serviceForm">
-            <input type="hidden" id="serviceId">
-            <div class="form-group"><input type="text" id="serviceName" placeholder="Название услуги" required></div>
-            <div class="form-group"><input type="number" id="serviceDuration" placeholder="Длительность (мин)" value="30" required></div>
-            <div class="form-group"><input type="number" id="servicePrice" placeholder="Цена (₽)" required></div>
-            <div class="form-group"><textarea id="serviceDescription" placeholder="Описание услуги" rows="2"></textarea></div>
-            <div class="form-group">
-                <label>URL фото (ссылка на картинку)</label>
-                <input type="url" id="serviceImageUrl" placeholder="https://example.com/photo.jpg">
-                <div class="help-text">Вставьте прямую ссылку на фото (можно с Unsplash, ImgBB, любой фотохостинг)</div>
+    <!-- SERVICES -->
+    <section id="services">
+        <div class="section-header">
+            <span class="label">Прайс-лист</span>
+            <h2>Услуги и <span class="green">цены</span></h2>
+            <div class="divider"></div>
+        </div>
+        <div class="services-grid" id="servicesGrid"></div>
+    </section>
+
+    <!-- BOOKING -->
+    <section id="booking">
+        <div class="section-header">
+            <span class="label">Онлайн запись</span>
+            <h2><span class="green">Записаться</span></h2>
+            <div class="divider"></div>
+        </div>
+
+        <div class="booking-container">
+            <div class="booking-steps">
+                <div class="booking-step active" data-step="1">1. Услуга</div>
+                <div class="booking-step" data-step="2">2. Дата и время</div>
+                <div class="booking-step" data-step="3">3. Контакты</div>
             </div>
-            <div class="image-preview" id="serviceImagePreview"></div>
-            <button type="submit" class="btn btn-primary" style="width:100%; margin-top: 15px;">Сохранить</button>
-        </form>
-    </div>
-</div>
 
-<div class="modal" id="loginModal">
-    <div class="modal-content">
-        <div class="modal-header"><h3>Вход администратора</h3><button class="btn-close" onclick="closeLoginModal()">×</button></div>
-        <input type="email" id="adminEmail" placeholder="Email" style="width:100%;margin-bottom:10px;padding:12px;background:#222;border:none;color:#fff;border-radius:8px">
-        <input type="password" id="adminPassword" placeholder="Пароль" style="width:100%;margin-bottom:15px;padding:12px;background:#222;border:none;color:#fff;border-radius:8px">
-        <button class="btn btn-primary" onclick="loginAdmin()" style="width:100%">Войти</button>
-    </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-    import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, setDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
-    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyA218b06cZZLdC0rAeN8PDuFk4kK6pv2ss",
-        authDomain: "mj-barbershop-95.firebaseapp.com",
-        projectId: "mj-barbershop-95",
-        storageBucket: "mj-barbershop-95.firebasestorage.app",
-        messagingSenderId: "469649777249",
-        appId: "1:469649777249:web:09aea1da0f7ba1277e8020"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
-
-    let services = [], bookings = [], selectedService = null, selectedDate = null, selectedTime = null;
-    let editingServiceId = null;
-
-    // Стандартные услуги
-    const defaultServices = [
-        { name: "Мужская стрижка", duration: 30, price: 400, description: "Классическая или современная стрижка", image: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=400" },
-        { name: "Стрижка ножницами", duration: 30, price: 600, description: "Премиум стрижка только ножницами", image: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400" },
-        { name: "Стрижка бороды", duration: 30, price: 300, description: "Оформление и коррекция бороды", image: "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=400" },
-        { name: "Стрижка + борода", duration: 30, price: 600, description: "Комплекс: стрижка и оформление бороды", image: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=400" },
-        { name: "Стрижка одной насадкой", duration: 30, price: 300, description: "Быстрая стрижка машинкой", image: "https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=400" }
-    ];
-
-    async function loadServices() {
-        const snap = await getDocs(collection(db, "services"));
-        if (snap.empty) {
-            for (const s of defaultServices) await addDoc(collection(db, "services"), s);
-            const newSnap = await getDocs(collection(db, "services"));
-            services = newSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-        } else {
-            services = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        }
-        renderServices();
-        renderServiceSelect();
-        renderAdminServices();
-    }
-
-    async function loadBookings() {
-        const snap = await getDocs(collection(db, "bookings"));
-        bookings = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        renderBookings();
-        renderAdminBookings();
-        renderTimeSlots();
-    }
-
-    function renderServices() {
-        const grid = document.getElementById('servicesGrid');
-        if (!grid) return;
-        if (services.length === 0) { grid.innerHTML = '<div class="service-card" style="text-align:center;padding:40px">Загрузка...</div>'; return; }
-        grid.innerHTML = services.map(s => `
-            <div class="service-card">
-                <img src="${s.image || 'https://via.placeholder.com/400'}" class="service-image" onerror="this.src='https://via.placeholder.com/400'">
-                <div class="service-content">
-                    <h3>${escapeHtml(s.name)}</h3>
-                    <p>⏱ ${s.duration} мин</p>
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
-                        <span class="price">${s.price} ₽</span>
-                        <button class="btn-book" onclick="window.bookService('${s.id}')">Записаться</button>
+            <div class="booking-body">
+                <!-- Step 1 -->
+                <div class="booking-panel active" id="panel1">
+                    <div class="service-select-list" id="serviceSelectList"></div>
+                    <div class="booking-nav">
+                        <div></div>
+                        <button class="btn-next" id="btnNext1" disabled onclick="goToStep(2)">Далее →</button>
                     </div>
                 </div>
-            </div>
-        `).join('');
-    }
 
-    function renderServiceSelect() {
-        const list = document.getElementById('serviceSelectList');
-        if (!list) return;
-        list.innerHTML = services.map(s => `
-            <div class="service-select-item" data-id="${s.id}" onclick="window.selectService('${s.id}')">
-                <img src="${s.image || 'https://via.placeholder.com/50'}" class="service-select-img" onerror="this.src='https://via.placeholder.com/50'">
-                <div style="flex:1"><strong>${escapeHtml(s.name)}</strong><br>${s.duration} мин</div>
-                <div class="service-select-price">${s.price} ₽</div>
-            </div>
-        `).join('');
-    }
+                <!-- Step 2 -->
+                <div class="booking-panel" id="panel2">
+                    <div class="calendar-container">
+                        <div class="calendar-header">
+                            <h3 id="calendarTitle"></h3>
+                            <div class="calendar-nav">
+                                <button onclick="changeMonth(-1)">‹</button>
+                                <button onclick="changeMonth(1)">›</button>
+                            </div>
+                        </div>
+                        <div class="calendar-weekdays">
+                            <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+                        </div>
+                        <div class="calendar-days" id="calendarDays"></div>
+                    </div>
+                    <div class="time-slots" id="timeSlots"></div>
+                    <div class="booking-nav">
+                        <button class="btn-back" onclick="goToStep(1)">← Назад</button>
+                        <button class="btn-next" id="btnNext2" disabled onclick="goToStep(3)">Далее →</button>
+                    </div>
+                </div>
 
-    function renderBookings() {
-        const list = document.getElementById('bookingsList');
-        if (!list) return;
-        if (bookings.length === 0) { list.innerHTML = '<div class="service-card" style="text-align:center;padding:40px">📋 Нет записей</div>'; return; }
-        list.innerHTML = bookings.map(b => `
-            <div class="service-card">
-                <div class="service-content">
-                    <h3>${escapeHtml(b.serviceName)}</h3>
-                    <p>📅 ${b.date} в ${b.time}</p>
-                    <p>💰 ${b.servicePrice} ₽</p>
-                    <button class="btn-book" onclick="window.cancelBooking('${b.id}')" style="background:#ff4444;color:white;border:none">Отменить</button>
+                <!-- Step 3 -->
+                <div class="booking-panel" id="panel3">
+                    <div class="form-group">
+                        <label>Ваше имя *</label>
+                        <input type="text" id="clientName" placeholder="Введите имя" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Номер телефона *</label>
+                        <input type="tel" id="clientPhone" placeholder="+7 (___) ___-__-__" required>
+                    </div>
+                    <div class="booking-nav">
+                        <button class="btn-back" onclick="goToStep(2)">← Назад</button>
+                        <button class="btn-next" onclick="confirmBooking()">✓ Подтвердить запись</button>
+                    </div>
+                </div>
+
+                <!-- Success -->
+                <div class="booking-panel" id="panelSuccess" style="text-align: center; padding: 40px;">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">✅</div>
+                    <h3 style="font-family: 'Montserrat', sans-serif; color: var(--green); font-size: 1.8rem; font-weight: 800; margin-bottom: 15px; text-transform: uppercase;">Вы записаны!</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 30px; font-size: 1.05rem;">Жду вас в назначенное время</p>
+                    <button class="btn btn-primary" onclick="resetBooking()">Записаться ещё</button>
                 </div>
             </div>
-        `).join('');
-    }
+        </div>
+    </section>
 
-    function renderAdminBookings() {
-        const tbody = document.getElementById('adminBookingsList');
-        if (!tbody) return;
-        tbody.innerHTML = bookings.map(b => `
-            <tr><td>${b.date}</td><td>${b.time}</td><td>${escapeHtml(b.clientName)}</td><td>${escapeHtml(b.serviceName)}</td><td><button class="btn-small btn-delete" onclick="window.adminDeleteBooking('${b.id}')">Удалить</button></td></tr>
-        `).join('');
-    }
+    <!-- MY BOOKINGS -->
+    <section id="my-bookings">
+        <div class="section-header">
+            <span class="label">Управление</span>
+            <h2><span class="green">Мои записи</span></h2>
+            <div class="divider"></div>
+        </div>
+        <div class="bookings-list" id="bookingsList"></div>
+    </section>
 
-    function renderAdminServices() {
-        const tbody = document.getElementById('adminServicesList');
-        if (!tbody) return;
-        tbody.innerHTML = services.map(s => `
-            <tr>
-                <td><img src="${s.image || 'https://via.placeholder.com/40'}" style="width:40px;height:40px;object-fit:cover;border-radius:8px" onerror="this.src='https://via.placeholder.com/40'"></td>
-                <td>${escapeHtml(s.name)}</td>
-                <td>${s.price} ₽</td>
-                <td><button class="btn-small btn-edit" onclick="window.editService('${s.id}')">✏️</button><button class="btn-small btn-delete" onclick="window.deleteService('${s.id}')">🗑️</button></td>
-            </tr>
-        `).join('');
-    }
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <h3>MJ Barbershop</h3>
+            <p>📍 МО, муниципальный округ Истра, д. Захарово, Речная улица, 1</p>
+            <p><a href="tel:+79879253693">📞 +7 (987) 925-36-93</a></p>
+            <p>🕐 Ежедневно: 10:00 - 22:00</p>
+            <div class="footer-bottom">
+                <p>© 2026 MJ Barbershop. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
 
-    async function confirmBooking() {
-        if (!selectedService || !selectedDate || !selectedTime) { showToast('Выберите услугу, дату и время', 'error'); return; }
-        const name = document.getElementById('clientName').value.trim();
-        const phone = document.getElementById('clientPhone').value.trim();
-        if (!name || !phone) { showToast('Заполните имя и телефон', 'error'); return; }
-        await addDoc(collection(db, "bookings"), {
-            serviceId: selectedService.id, serviceName: selectedService.name, servicePrice: selectedService.price,
-            serviceDuration: selectedService.duration, date: selectedDate, time: selectedTime,
-            clientName: name, clientPhone: phone, createdAt: new Date().toISOString()
+    <!-- ADMIN PANEL -->
+    <div id="admin-panel">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h2>MJ Barbershop — Панель управления</h2>
+                <button class="btn btn-outline" onclick="closeAdmin()">Выйти</button>
+            </div>
+
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="showAdminTab('bookings')">Записи</button>
+                <button class="admin-tab" onclick="showAdminTab('services')">Услуги</button>
+                <button class="admin-tab" onclick="showAdminTab('blocked')">Закрытые даты</button>
+                <button class="admin-tab" onclick="showAdminTab('hero')">Главное фото</button>
+            </div>
+
+            <div class="admin-content">
+                <!-- Bookings Tab -->
+                <div class="admin-section active" id="tab-bookings">
+                    <h3 style="margin-bottom: 20px; color: var(--green); font-weight: 700;">Все записи</h3>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr><th>Дата</th><th>Время</th><th>Клиент</th><th>Телефон</th><th>Услуга</th><th>Цена</th><th>Действия</th></tr>
+                            </thead>
+                            <tbody id="adminBookingsList"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Services Tab -->
+                <div class="admin-section" id="tab-services">
+                    <button class="btn-add" onclick="openServiceModal()">+ Добавить услугу</button>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead><tr><th>Фото</th><th>Название</th><th>Длительность</th><th>Цена</th><th>Действия</th></tr></thead>
+                            <tbody id="adminServicesList"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Blocked Dates Tab -->
+                <div class="admin-section" id="tab-blocked">
+                    <h3 style="margin-bottom: 20px; color: var(--green); font-weight: 700;">Заблокировать даты</h3>
+                    <div class="form-group">
+                        <label>Выберите дату для блокировки</label>
+                        <input type="date" id="blockDateInput" style="width: 100%;">
+                    </div>
+                    <button class="btn-add" onclick="addBlockedDate()">Заблокировать дату</button>
+                    <h4 style="margin: 30px 0 15px; color: var(--green); font-weight: 700;">Заблокированные даты:</h4>
+                    <div class="blocked-dates" id="blockedDatesList"></div>
+                </div>
+
+                <!-- Hero Image Tab -->
+                <div class="admin-section" id="tab-hero">
+                    <h3 style="margin-bottom: 20px; color: var(--green); font-weight: 700;">Главное фото</h3>
+                    <div class="form-group">
+                        <label>URL фото (прямая ссылка)</label>
+                        <input type="url" id="heroImageUrl" placeholder="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400">
+                        <div class="help-text">Вставьте прямую ссылку на фото (можно с ImgBB, Unsplash, любой фотохостинг)</div>
+                    </div>
+                    <div class="image-preview" id="heroPreview"></div>
+                    <button class="btn-add" onclick="saveHeroImage()" style="margin-top: 15px;">Сохранить главное фото</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SERVICE MODAL -->
+    <div class="modal" id="serviceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Добавить услугу</h3>
+                <button class="btn-close" onclick="closeServiceModal()">×</button>
+            </div>
+            <form id="serviceForm">
+                <input type="hidden" id="serviceId">
+                <div class="form-group"><label>Название услуги *</label><input type="text" id="serviceName" required></div>
+                <div class="form-group"><label>Длительность (мин) *</label><input type="number" id="serviceDuration" value="30" required></div>
+                <div class="form-group"><label>Цена (₽) *</label><input type="number" id="servicePrice" required></div>
+                <div class="form-group"><label>Описание</label><textarea id="serviceDescription" rows="2" style="width:100%;padding:12px;background:var(--dark-3);border:2px solid var(--dark-4);color:var(--text);border-radius:4px;font-family:inherit;"></textarea></div>
+                <div class="image-upload">
+                    <label>URL фото (прямая ссылка)</label>
+                    <input type="url" id="serviceImageUrl" placeholder="https://example.com/photo.jpg">
+                    <div class="help-text">Вставьте прямую ссылку на фото (можно с ImgBB, Unsplash, любой фотохостинг)</div>
+                    <div class="image-preview" id="imagePreview"><span style="color: var(--text-muted);">Фото не выбрано</span></div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Сохранить</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content" style="max-width: 420px;">
+            <div class="modal-header">
+                <h3>Вход для администратора</h3>
+                <button class="btn-close" onclick="closeLoginModal()">×</button>
+            </div>
+            <div class="login-form">
+                <input type="password" id="adminPassword" placeholder="Введите пароль">
+                <button class="btn btn-primary" onclick="loginAdmin()">Войти</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ==================== DATA ====================
+        let services = JSON.parse(localStorage.getItem('mj_services')) || [
+            { id: 1, name: 'Мужская стрижка', duration: 30, price: 400, description: 'Классическая или современная стрижка', image: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=400' },
+            { id: 2, name: 'Стрижка ножницами', duration: 30, price: 600, description: 'Премиум стрижка только ножницами', image: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400' },
+            { id: 3, name: 'Стрижка бороды', duration: 30, price: 300, description: 'Оформление и коррекция бороды', image: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=400' },
+            { id: 4, name: 'Стрижка + борода', duration: 30, price: 600, description: 'Комплекс: стрижка и оформление бороды', image: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=400' },
+            { id: 5, name: 'Стрижка одной насадкой', duration: 30, price: 300, description: 'Быстрая стрижка машинкой', image: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=400' }
+        ];
+
+        let bookings = JSON.parse(localStorage.getItem('mj_bookings')) || [];
+        let blockedDates = JSON.parse(localStorage.getItem('mj_blocked_dates')) || [];
+
+        let selectedService = null, selectedDate = null, selectedTime = null;
+        let calendarDate = new Date(), currentStep = 1;
+
+        const workingHours = { start: 10, end: 22 };
+
+        // ==================== INIT ====================
+        function init() {
+            renderServices();
+            renderServiceSelect();
+            renderCalendar();
+            renderBookings();
+            renderAdminBookings();
+            renderAdminServices();
+            renderBlockedDates();
+            loadHeroImage();
+        }
+
+        // ==================== HEADER ====================
+        window.addEventListener('scroll', () => {
+            document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
         });
-        await loadBookings();
-        document.querySelectorAll('.booking-panel').forEach(p => p.classList.remove('active'));
-        document.getElementById('panelSuccess').classList.add('active');
-        showToast('Записано!', 'success');
-    }
 
-    async function cancelBooking(id) { if (confirm('Отменить?')) { await deleteDoc(doc(db, "bookings", id)); await loadBookings(); showToast('Отменено', 'success'); } }
-    async function adminDeleteBooking(id) { if (confirm('Удалить?')) { await deleteDoc(doc(db, "bookings", id)); await loadBookings(); showToast('Удалено', 'success'); } }
+        function toggleMenu() { document.getElementById('navLinks').classList.toggle('open'); }
 
-    async function saveService(e) {
-        e.preventDefault();
-        const imageUrl = document.getElementById('serviceImageUrl').value;
-        const data = {
-            name: document.getElementById('serviceName').value,
-            duration: parseInt(document.getElementById('serviceDuration').value),
-            price: parseInt(document.getElementById('servicePrice').value),
-            description: document.getElementById('serviceDescription').value,
-            image: imageUrl || 'https://via.placeholder.com/400'
-        };
-        if (editingServiceId) await setDoc(doc(db, "services", editingServiceId), data);
-        else await addDoc(collection(db, "services"), data);
-        await loadServices();
-        closeServiceModal();
-        showToast('Сохранено!', 'success');
-    }
+        // ==================== SERVICES ====================
+        function renderServices() {
+            const grid = document.getElementById('servicesGrid');
+            grid.innerHTML = services.map(s => `
+                <div class="service-card">
+                    <img src="${s.image}" alt="${s.name}" class="service-image" onerror="this.src='https://via.placeholder.com/400x200/1a1a1a/00d455?text=MJ+Barber'">
+                    <div class="service-content">
+                        <h3>${escapeHtml(s.name)}</h3>
+                        <span class="duration">⏱ ${s.duration} мин</span>
+                        <p>${escapeHtml(s.description || '')}</p>
+                        <div class="service-footer">
+                            <span class="price">${s.price} <small>₽</small></span>
+                            <button class="btn-book" onclick="bookService(${s.id})">Записаться</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
 
-    async function deleteService(id) { if (confirm('Удалить услугу?')) { await deleteDoc(doc(db, "services", id)); await loadServices(); showToast('Удалено', 'success'); } }
+        function renderServiceSelect() {
+            const list = document.getElementById('serviceSelectList');
+            list.innerHTML = services.map(s => `
+                <div class="service-select-item" data-id="${s.id}" onclick="selectService(${s.id})">
+                    <img src="${s.image}" alt="${s.name}" class="service-select-img" onerror="this.src='https://via.placeholder.com/70/1a1a1a/00d455?text=✂️'">
+                    <div class="service-select-info">
+                        <h4>${escapeHtml(s.name)}</h4>
+                        <span>⏱ ${s.duration} мин</span>
+                    </div>
+                    <div class="service-select-price">${s.price} ₽</div>
+                </div>
+            `).join('');
+        }
 
-    function openServiceModal(id = null) {
-        editingServiceId = id;
-        document.getElementById('serviceForm').reset();
-        document.getElementById('serviceImagePreview').innerHTML = '';
-        if (id) {
-            const s = services.find(s => s.id === id);
-            if (s) {
+        function selectService(id) {
+            selectedService = services.find(s => s.id === id);
+            document.querySelectorAll('.service-select-item').forEach(el => {
+                el.classList.toggle('selected', parseInt(el.dataset.id) === id);
+            });
+            document.getElementById('btnNext1').disabled = false;
+        }
+
+        function bookService(id) {
+            selectedService = services.find(s => s.id === id);
+            document.querySelectorAll('.service-select-item').forEach(el => {
+                el.classList.toggle('selected', parseInt(el.dataset.id) === id);
+            });
+            document.getElementById('btnNext1').disabled = false;
+            goToStep(2);
+            document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ==================== CALENDAR ====================
+        const monthNames = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+
+        function renderCalendar() {
+            const year = calendarDate.getFullYear(), month = calendarDate.getMonth();
+            const today = new Date(); today.setHours(0,0,0,0);
+
+            document.getElementById('calendarTitle').textContent = `${monthNames[month]} ${year}`;
+
+            const firstDay = new Date(year, month, 1);
+            let startDay = firstDay.getDay() - 1; if (startDay < 0) startDay = 6;
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const container = document.getElementById('calendarDays');
+            let html = '';
+
+            for (let i = 0; i < startDay; i++) html += '<div class="calendar-day empty"></div>';
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const date = new Date(year, month, d);
+                const isPast = date < today;
+                const dateStr = formatDateKey(date);
+                const isBlocked = blockedDates.includes(dateStr);
+                const isSelected = selectedDate && dateStr === formatDateKey(selectedDate);
+                const isToday = date.getTime() === today.getTime();
+
+                let classes = 'calendar-day';
+                if (isPast || isBlocked) classes += ' disabled';
+                if (isBlocked) classes += ' blocked';
+                if (isSelected) classes += ' selected';
+                if (isToday && !isBlocked) classes += ' today';
+
+                html += `<div class="${classes}" onclick="${isPast || isBlocked ? '' : `selectDate(${year}, ${month}, ${d})`}">${d}</div>`;
+            }
+            container.innerHTML = html;
+        }
+
+        function changeMonth(dir) { calendarDate.setMonth(calendarDate.getMonth() + dir); renderCalendar(); }
+
+        function selectDate(year, month, day) {
+            selectedDate = new Date(year, month, day);
+            selectedTime = null;
+            renderCalendar();
+            renderTimeSlots();
+            checkStep2();
+        }
+
+        // ==================== TIME SLOTS ====================
+        function renderTimeSlots() {
+            const container = document.getElementById('timeSlots');
+            if (!selectedDate) { container.innerHTML = ''; return; }
+
+            const dateStr = formatDateKey(selectedDate);
+            const dayBookings = bookings.filter(b => b.date === dateStr);
+            const bookedTimes = dayBookings.map(b => b.time);
+            
+            const now = new Date();
+            const todayStr = formatDateKey(now);
+            const isToday = dateStr === todayStr;
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+
+            let html = '';
+            for (let h = workingHours.start; h < workingHours.end; h++) {
+                for (let m = 0; m < 60; m += 30) {
+                    const timeStr = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
+                    const isBooked = bookedTimes.includes(timeStr);
+                    
+                    let isPastTime = false;
+                    if (isToday) {
+                        if (h < currentHour) {
+                            isPastTime = true;
+                        } else if (h === currentHour && m <= currentMinute) {
+                            isPastTime = true;
+                        }
+                    }
+                    
+                    const isSelected = selectedTime === timeStr;
+                    let cls = 'time-slot';
+                    if (isBooked || isPastTime) cls += ' booked';
+                    if (isSelected) cls += ' selected';
+                    html += `<div class="${cls}" onclick="${isBooked || isPastTime ? '' : `selectTime('${timeStr}')`}">${timeStr}</div>`;
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        function selectTime(time) { selectedTime = time; renderTimeSlots(); checkStep2(); }
+        function checkStep2() { document.getElementById('btnNext2').disabled = !(selectedDate && selectedTime); }
+
+        // ==================== BOOKING STEPS ====================
+        function goToStep(step) {
+            if (step === 2 && !selectedService) return;
+            if (step === 3 && (!selectedDate || !selectedTime)) { showToast('Выберите дату и время', 'error'); return; }
+            currentStep = step;
+            document.querySelectorAll('.booking-step').forEach(el => {
+                el.classList.toggle('active', parseInt(el.dataset.step) === step);
+            });
+            document.querySelectorAll('.booking-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(`panel${step}`).classList.add('active');
+            if (step === 2) renderTimeSlots();
+        }
+
+        function confirmBooking() {
+            const now = new Date();
+            const selectedDateTime = new Date(selectedDate);
+            const [hours, minutes] = selectedTime.split(':');
+            selectedDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+            
+            if (selectedDateTime < now) {
+                showToast('Нельзя записаться на прошедшее время!', 'error');
+                return;
+            }
+            
+            const name = document.getElementById('clientName').value.trim();
+            const phone = document.getElementById('clientPhone').value.trim();
+            if (!name) { showToast('Введите ваше имя', 'error'); return; }
+            if (!phone) { showToast('Введите номер телефона', 'error'); return; }
+
+            const booking = {
+                id: Date.now(),
+                serviceId: selectedService.id,
+                serviceName: selectedService.name,
+                servicePrice: selectedService.price,
+                serviceDuration: selectedService.duration,
+                date: formatDateKey(selectedDate),
+                dateFormatted: selectedDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' }),
+                time: selectedTime,
+                clientName: name,
+                clientPhone: phone,
+                createdAt: new Date().toISOString()
+            };
+
+            bookings.push(booking);
+            localStorage.setItem('mj_bookings', JSON.stringify(bookings));
+
+            document.querySelectorAll('.booking-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('panelSuccess').classList.add('active');
+
+            renderBookings();
+            renderAdminBookings();
+            renderTimeSlots();
+            showToast('Вы успешно записаны! ✂️', 'success');
+        }
+
+        function resetBooking() {
+            selectedService = null; selectedDate = null; selectedTime = null; currentStep = 1;
+            document.getElementById('clientName').value = '';
+            document.getElementById('clientPhone').value = '';
+            document.getElementById('btnNext1').disabled = true;
+            document.getElementById('btnNext2').disabled = true;
+            document.querySelectorAll('.service-select-item').forEach(el => el.classList.remove('selected'));
+            document.querySelectorAll('.booking-step').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.booking-panel').forEach(p => p.classList.remove('active'));
+            document.querySelector('.booking-step[data-step="1"]').classList.add('active');
+            document.getElementById('panel1').classList.add('active');
+            renderCalendar();
+        }
+
+        // ==================== MY BOOKINGS ====================
+        function renderBookings() {
+            const list = document.getElementById('bookingsList');
+            const today = new Date(); today.setHours(0,0,0,0);
+
+            const myBookings = [...bookings].sort((a,b) => new Date(a.date+'T'+a.time) - new Date(b.date+'T'+b.time));
+
+            if (myBookings.length === 0) {
+                list.innerHTML = `<div class="no-bookings"><span class="icon">📋</span><p>У вас пока нет записей</p><p style="font-size:0.85rem;margin-top:5px">Выберите услугу и запишитесь онлайн</p></div>`;
+                return;
+            }
+
+            list.innerHTML = myBookings.map(b => {
+                const bookingDate = new Date(b.date + 'T00:00:00');
+                const isPast = bookingDate < today || (bookingDate.getTime() === today.getTime() && b.time < new Date().toTimeString().slice(0,5));
+                const dayNum = bookingDate.getDate();
+                const monthName = bookingDate.toLocaleDateString('ru-RU', { month: 'short' });
+                const timeLabel = isPast ? 'Завершено' : b.time;
+                
+                return `
+                    <div class="booking-item ${isPast ? 'past' : ''}">
+                        <div class="booking-item-date">
+                            <span class="day">${dayNum}</span>
+                            <span class="month">${monthName}</span>
+                        </div>
+                        <div class="booking-item-details">
+                            <h4>${escapeHtml(b.serviceName)}</h4>
+                            <p>🕐 ${timeLabel} • ⏱ ${b.serviceDuration} мин</p>
+                            <p class="price-tag">💰 ${b.servicePrice} ₽</p>
+                        </div>
+                        ${!isPast ? `<button class="btn-cancel" onclick="cancelBooking(${b.id})">Отменить</button>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function cancelBooking(id) {
+            if (!confirm('Отменить запись?')) return;
+            bookings = bookings.filter(b => b.id !== id);
+            localStorage.setItem('mj_bookings', JSON.stringify(bookings));
+            renderBookings();
+            renderAdminBookings();
+            renderTimeSlots();
+            showToast('Запись отменена', 'success');
+        }
+
+        // ==================== ADMIN PANEL ====================
+        function openAdminLogin() { document.getElementById('loginModal').classList.add('active'); }
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+            document.getElementById('adminPassword').value = '';
+        }
+
+        function loginAdmin() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === 'majon95') {
+                closeLoginModal();
+                document.getElementById('admin-panel').classList.add('active');
+                document.querySelector('header').style.display = 'none';
+                renderAdminBookings();
+                renderAdminServices();
+                renderBlockedDates();
+                window.scrollTo(0, 0);
+                showToast('Добро пожаловать, админ!', 'success');
+            } else {
+                showToast('Неверный пароль', 'error');
+            }
+        }
+
+        function closeAdmin() {
+            document.getElementById('admin-panel').classList.remove('active');
+            document.querySelector('header').style.display = 'block';
+        }
+
+        function showAdminTab(tab) {
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+        }
+
+        function renderAdminBookings() {
+            const tbody = document.getElementById('adminBookingsList');
+            const sorted = [...bookings].sort((a,b) => new Date(b.date+'T'+b.time) - new Date(a.date+'T'+a.time));
+            if (sorted.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:30px">Нет записей</td></tr>';
+                return;
+            }
+            tbody.innerHTML = sorted.map(b => `
+                <tr>
+                    <td>${b.dateFormatted}</td><td>${b.time}</td><td>${escapeHtml(b.clientName)}</td>
+                    <td>${escapeHtml(b.clientPhone)}</td><td>${escapeHtml(b.serviceName)}</td><td>${b.servicePrice} ₽</td>
+                    <td><button class="btn-small btn-delete" onclick="adminDeleteBooking(${b.id})">Удалить</button></td>
+                </tr>
+            `).join('');
+        }
+
+        function adminDeleteBooking(id) {
+            if (!confirm('Удалить эту запись?')) return;
+            bookings = bookings.filter(b => b.id !== id);
+            localStorage.setItem('mj_bookings', JSON.stringify(bookings));
+            renderAdminBookings();
+            renderBookings();
+            showToast('Запись удалена', 'success');
+        }
+
+        // ==================== ADMIN SERVICES ====================
+        function renderAdminServices() {
+            const tbody = document.getElementById('adminServicesList');
+            tbody.innerHTML = services.map(s => `
+                <tr>
+                    <td><img src="${s.image}" style="width:50px;height:50px;object-fit:cover;border-radius:4px" onerror="this.src='https://via.placeholder.com/50/1a1a1a/00d455?text=✂️'"></td>
+                    <td>${escapeHtml(s.name)}</td><td>${s.duration} мин</td><td>${s.price} ₽</td>
+                    <td>
+                        <button class="btn-small btn-edit" onclick="editService(${s.id})">Изменить</button>
+                        <button class="btn-small btn-delete" onclick="deleteService(${s.id})">Удалить</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openServiceModal(serviceId = null) {
+            const modal = document.getElementById('serviceModal');
+            const form = document.getElementById('serviceForm');
+            if (serviceId) {
+                const s = services.find(x => x.id === serviceId);
                 document.getElementById('modalTitle').textContent = 'Изменить услугу';
                 document.getElementById('serviceId').value = s.id;
                 document.getElementById('serviceName').value = s.name;
@@ -410,192 +1929,133 @@
                 document.getElementById('servicePrice').value = s.price;
                 document.getElementById('serviceDescription').value = s.description || '';
                 document.getElementById('serviceImageUrl').value = s.image || '';
-                if (s.image) document.getElementById('serviceImagePreview').innerHTML = `<img src="${s.image}" onerror="this.parentElement.innerHTML='<span style=\"color:#888\">Не удалось загрузить фото</span>'">`;
+                document.getElementById('imagePreview').innerHTML = s.image ? `<img src="${s.image}" onerror="this.parentElement.innerHTML='<span style=\"color:var(--text-muted)\">Ошибка загрузки</span>'">` : '<span style="color:var(--text-muted)">Фото не выбрано</span>';
+            } else {
+                document.getElementById('modalTitle').textContent = 'Добавить услугу';
+                form.reset();
+                document.getElementById('serviceId').value = '';
+                document.getElementById('imagePreview').innerHTML = '<span style="color:var(--text-muted)">Фото не выбрано</span>';
             }
-        } else {
-            document.getElementById('modalTitle').textContent = 'Добавить услугу';
-            document.getElementById('serviceId').value = '';
+            modal.classList.add('active');
         }
-        document.getElementById('serviceModal').classList.add('active');
-    }
 
-    function closeServiceModal() { document.getElementById('serviceModal').classList.remove('active'); }
+        function closeServiceModal() { document.getElementById('serviceModal').classList.remove('active'); }
 
-    // Главное фото
-    async function saveHeroImage() {
-        const url = document.getElementById('heroImageUrl').value.trim();
-        if (!url) { showToast('Введите ссылку на фото', 'error'); return; }
-        localStorage.setItem('heroImage', url);
-        document.getElementById('heroImage').src = url;
-        document.getElementById('heroPreview').innerHTML = `<img src="${url}" style="max-width:100%;max-height:150px;border-radius:50%" onerror="this.parentElement.innerHTML='<span style=\"color:#888\">Ошибка загрузки</span>'">`;
-        showToast('Главное фото обновлено!', 'success');
-    }
+        document.getElementById('serviceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const id = document.getElementById('serviceId').value;
+            const imageUrl = document.getElementById('serviceImageUrl').value;
+            const serviceData = {
+                id: id ? parseInt(id) : Date.now(),
+                name: document.getElementById('serviceName').value,
+                duration: parseInt(document.getElementById('serviceDuration').value) || 30,
+                price: parseInt(document.getElementById('servicePrice').value),
+                description: document.getElementById('serviceDescription').value,
+                image: imageUrl || 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=400'
+            };
+            if (id) {
+                const index = services.findIndex(s => s.id === parseInt(id));
+                services[index] = serviceData;
+            } else { services.push(serviceData); }
+            localStorage.setItem('mj_services', JSON.stringify(services));
+            closeServiceModal();
+            renderServices(); renderServiceSelect(); renderAdminServices();
+            showToast('Услуга сохранена', 'success');
+        });
 
-    function loadHeroImage() {
-        const url = localStorage.getItem('heroImage');
-        if (url) {
+        function editService(id) { openServiceModal(id); }
+        function deleteService(id) {
+            if (!confirm('Удалить эту услугу?')) return;
+            services = services.filter(s => s.id !== id);
+            localStorage.setItem('mj_services', JSON.stringify(services));
+            renderServices(); renderServiceSelect(); renderAdminServices();
+            showToast('Услуга удалена', 'success');
+        }
+
+        // ==================== HERO IMAGE ====================
+        function saveHeroImage() {
+            const url = document.getElementById('heroImageUrl').value.trim();
+            if (!url) { showToast('Введите ссылку на фото', 'error'); return; }
+            localStorage.setItem('heroImage', url);
             document.getElementById('heroImage').src = url;
-            document.getElementById('heroImageUrl').value = url;
-            document.getElementById('heroPreview').innerHTML = `<img src="${url}" style="max-width:100%;max-height:150px;border-radius:50%" onerror="this.parentElement.innerHTML='<span style=\"color:#888\">Не удалось загрузить</span>'">`;
+            document.getElementById('heroPreview').innerHTML = `<img src="${url}" style="max-width:100%;max-height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='<span style=\"color:var(--text-muted)\">Ошибка загрузки</span>'">`;
+            showToast('Главное фото обновлено!', 'success');
         }
-    }
 
-    // Админ
-    async function loginAdmin() {
-        const email = document.getElementById('adminEmail').value;
-        const password = document.getElementById('adminPassword').value;
-        try { await signInWithEmailAndPassword(auth, email, password); closeLoginModal(); document.getElementById('admin-panel').classList.add('active'); document.querySelector('header').style.display = 'none'; showToast('Вход выполнен', 'success'); } catch(e) { showToast('Неверный email или пароль', 'error'); }
-    }
-    function logoutAdmin() { signOut(auth); document.getElementById('admin-panel').classList.remove('active'); document.querySelector('header').style.display = 'block'; }
-    function openAdminLogin() { document.getElementById('loginModal').classList.add('active'); }
-    function closeLoginModal() { document.getElementById('loginModal').classList.remove('active'); }
-
-    function showAdminTab(tab) {
-        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-        event.target.classList.add('active');
-        document.getElementById(`tab-${tab}`).classList.add('active');
-    }
-
-    // Календарь и время
-    function renderCalendar() {
-        const today = new Date(); today.setHours(0,0,0,0);
-        const year = today.getFullYear(), month = today.getMonth();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        let html = '<div style="display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:10px;text-align:center;color:#888">Пн Вт Ср Чт Пт Сб Вс</div><div class="calendar-days">';
-        for (let d = 1; d <= daysInMonth; d++) {
-            const date = new Date(year, month, d);
-            const isPast = date < today;
-            const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-            const isSelected = selectedDate === dateStr;
-            html += `<div class="calendar-day ${isPast ? 'disabled' : ''} ${isSelected ? 'selected' : ''}" onclick="${isPast ? '' : `window.selectDate('${dateStr}')`}">${d}</div>`;
-        }
-        html += '</div>';
-        const container = document.getElementById('calendarDays');
-        if (container) container.innerHTML = html;
-    }
-
-    function selectDate(dateStr) {
-        selectedDate = dateStr;
-        selectedTime = null;
-        renderCalendar();
-        renderTimeSlots();
-        checkStep2();
-    }
-
-    function renderTimeSlots() {
-        const container = document.getElementById('timeSlots');
-        if (!container || !selectedDate) { if(container) container.innerHTML = ''; return; }
-        const dayBookings = bookings.filter(b => b.date === selectedDate);
-        const bookedTimes = dayBookings.map(b => b.time);
-        
-        const now = new Date();
-        const todayStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-        const isToday = selectedDate === todayStr;
-        const currentHour = now.getHours();
-        const currentMinute = now.getMinutes();
-        
-        let html = '';
-        for (let h = 10; h < 22; h++) {
-            for (let m = 0; m < 60; m += 30) {
-                const timeStr = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
-                let isPastTime = false;
-                if (isToday) {
-                    if (h < currentHour) isPastTime = true;
-                    else if (h === currentHour && m <= currentMinute) isPastTime = true;
-                }
-                const isBooked = bookedTimes.includes(timeStr);
-                const isSelected = selectedTime === timeStr;
-                let cls = 'time-slot';
-                if (isBooked || isPastTime) cls += ' booked';
-                if (isSelected) cls += ' selected';
-                let onclickAttr = (!isBooked && !isPastTime) ? `onclick="window.selectTime('${timeStr}')"` : '';
-                html += `<div class="${cls}" ${onclickAttr}>${timeStr}</div>`;
+        function loadHeroImage() {
+            const url = localStorage.getItem('heroImage');
+            if (url) {
+                document.getElementById('heroImage').src = url;
+                document.getElementById('heroImageUrl').value = url;
+                document.getElementById('heroPreview').innerHTML = `<img src="${url}" style="max-width:100%;max-height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='<span style=\"color:var(--text-muted)\">Ошибка загрузки</span>'">`;
             }
         }
-        container.innerHTML = html;
-    }
 
-    function selectTime(time) { selectedTime = time; renderTimeSlots(); checkStep2(); }
-    function checkStep2() { document.getElementById('btnNext2').disabled = !(selectedDate && selectedTime); }
-
-    function goToStep(step) {
-        if (step === 2 && !selectedService) { showToast('Выберите услугу', 'error'); return; }
-        if (step === 3 && (!selectedDate || !selectedTime)) { showToast('Выберите дату и время', 'error'); return; }
-        document.querySelectorAll('.booking-step').forEach(el => el.classList.toggle('active', parseInt(el.dataset.step) === step));
-        document.querySelectorAll('.booking-panel').forEach(p => p.classList.remove('active'));
-        document.getElementById(`panel${step}`).classList.add('active');
-        if (step === 2) renderTimeSlots();
-    }
-
-    function resetBooking() {
-        selectedService = null; selectedDate = null; selectedTime = null;
-        document.getElementById('clientName').value = '';
-        document.getElementById('clientPhone').value = '';
-        document.getElementById('btnNext1').disabled = true;
-        document.getElementById('btnNext2').disabled = true;
-        document.querySelectorAll('.service-select-item').forEach(el => el.classList.remove('selected'));
-        document.querySelectorAll('.booking-step').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.booking-panel').forEach(p => p.classList.remove('active'));
-        document.querySelector('.booking-step[data-step="1"]').classList.add('active');
-        document.getElementById('panel1').classList.add('active');
-        renderCalendar();
-    }
-
-    function selectService(id) {
-        selectedService = services.find(s => s.id === id);
-        document.querySelectorAll('.service-select-item').forEach(el => el.classList.toggle('selected', el.dataset.id === id));
-        document.getElementById('btnNext1').disabled = false;
-    }
-
-    function bookService(id) { selectService(id); goToStep(2); document.getElementById('booking').scrollIntoView({ behavior: 'smooth' }); }
-
-    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
-    function showToast(message, type) { const toast = document.getElementById('toast'); toast.textContent = message; toast.className = `toast ${type} show`; setTimeout(() => toast.classList.remove('show'), 3000); }
-    function toggleMenu() { document.getElementById('navLinks').classList.toggle('open'); }
-
-    // Привязка к window
-    window.selectDate = selectDate; window.selectTime = selectTime; window.bookService = bookService;
-    window.selectService = selectService; window.cancelBooking = cancelBooking; window.adminDeleteBooking = adminDeleteBooking;
-    window.editService = openServiceModal; window.deleteService = deleteService; window.loginAdmin = loginAdmin;
-    window.logoutAdmin = logoutAdmin; window.openAdminLogin = openAdminLogin; window.closeLoginModal = closeLoginModal;
-    window.goToStep = goToStep; window.resetBooking = resetBooking; window.confirmBooking = confirmBooking;
-    window.toggleMenu = toggleMenu; window.showAdminTab = showAdminTab; window.closeServiceModal = closeServiceModal;
-    window.saveHeroImage = saveHeroImage;
-
-    document.getElementById('serviceForm').addEventListener('submit', saveService);
-    document.getElementById('clientPhone')?.addEventListener('input', function(e) {
-        let val = e.target.value.replace(/\D/g,'');
-        if (val.length > 0) {
-            if (val[0]==='7'||val[0]==='8') val = val.substring(1);
-            let formatted = '+7';
-            if (val.length>0) formatted += ' ('+val.substring(0,3);
-            if (val.length>=3) formatted += ') '+val.substring(3,6);
-            if (val.length>=6) formatted += '-'+val.substring(6,8);
-            if (val.length>=8) formatted += '-'+val.substring(8,10);
-            e.target.value = formatted;
+        // ==================== BLOCKED DATES ====================
+        function renderBlockedDates() {
+            const container = document.getElementById('blockedDatesList');
+            if (blockedDates.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-muted)">Нет заблокированных дат</p>';
+                return;
+            }
+            container.innerHTML = blockedDates.map(date => {
+                const d = new Date(date + 'T00:00:00');
+                const formatted = d.toLocaleDateString('ru-RU', { day:'numeric', month:'long', year:'numeric' });
+                return `<div class="blocked-date-item"><span>${formatted}</span><button class="btn-remove-block" onclick="removeBlockedDate('${date}')">×</button></div>`;
+            }).join('');
         }
-    });
 
-    async function init() {
-        await loadServices();
-        await loadBookings();
-        renderCalendar();
-        loadHeroImage();
-    }
-    init();
-
-    onSnapshot(collection(db, "services"), () => loadServices());
-    onSnapshot(collection(db, "bookings"), () => loadBookings());
-
-    onAuthStateChanged(auth, (user) => {
-        if (!user && document.getElementById('admin-panel').classList.contains('active')) {
-            document.getElementById('admin-panel').classList.remove('active');
-            document.querySelector('header').style.display = 'block';
+        function addBlockedDate() {
+            const dateInput = document.getElementById('blockDateInput').value;
+            if (!dateInput) { showToast('Выберите дату', 'error'); return; }
+            if (blockedDates.includes(dateInput)) { showToast('Эта дата уже заблокирована', 'error'); return; }
+            blockedDates.push(dateInput);
+            localStorage.setItem('mj_blocked_dates', JSON.stringify(blockedDates));
+            renderBlockedDates(); renderCalendar();
+            showToast('Дата заблокирована', 'success');
+            document.getElementById('blockDateInput').value = '';
         }
-    });
 
-    window.addEventListener('scroll', () => { document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50); });
-</script>
+        function removeBlockedDate(date) {
+            blockedDates = blockedDates.filter(d => d !== date);
+            localStorage.setItem('mj_blocked_dates', JSON.stringify(blockedDates));
+            renderBlockedDates(); renderCalendar();
+            showToast('Дата разблокирована', 'success');
+        }
+
+        // ==================== HELPERS ====================
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
+        
+        function formatDateKey(date) {
+            const y = date.getFullYear();
+            const m = (date.getMonth()+1).toString().padStart(2,'0');
+            const d = date.getDate().toString().padStart(2,'0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Phone mask
+        document.getElementById('clientPhone')?.addEventListener('input', function(e) {
+            let val = e.target.value.replace(/\D/g,'');
+            if (val.length > 0) {
+                if (val[0]==='7'||val[0]==='8') val = val.substring(1);
+                let formatted = '+7';
+                if (val.length>0) formatted += ' ('+val.substring(0,3);
+                if (val.length>=3) formatted += ') '+val.substring(3,6);
+                if (val.length>=6) formatted += '-'+val.substring(6,8);
+                if (val.length>=8) formatted += '-'+val.substring(8,10);
+                e.target.value = formatted;
+            }
+        });
+
+        // ==================== INIT ====================
+        init();
+    </script>
 </body>
 </html>
