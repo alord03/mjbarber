@@ -696,7 +696,7 @@
             font-weight: 700;
         }
 
-        .form-group input {
+        .form-group input, .form-group textarea {
             width: 100%;
             padding: 16px 20px;
             background: var(--dark-3);
@@ -709,7 +709,12 @@
             border-radius: 4px;
         }
 
-        .form-group input:focus {
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
             border-color: var(--green);
             box-shadow: 0 0 0 3px var(--green-glow);
         }
@@ -957,8 +962,8 @@
         .data-table {
             width: 100%;
             border-collapse: collapse;
-            overflow-x: auto;
             display: block;
+            overflow-x: auto;
         }
 
         .data-table th,
@@ -1262,13 +1267,12 @@
             .booking-steps { flex-wrap: wrap; }
             .booking-step { font-size: 0.7rem; padding: 14px 8px; }
             .admin-tabs { flex-wrap: wrap; }
-            .data-table { font-size: 0.8rem; display: block; overflow-x: auto; }
+            .data-table { font-size: 0.8rem; }
             .data-table th, .data-table td { padding: 10px 8px; }
             .time-slots { grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); }
             .hero-buttons { flex-direction: column; align-items: center; }
             .btn-outline { margin-left: 0; }
             .booking-item { flex-direction: column; text-align: center; }
-            .booking-item-info { flex-direction: column; }
             .hero-image-container { max-width: 250px; }
             section { padding: 60px 16px; }
             .section-header { margin-bottom: 35px; }
@@ -1447,7 +1451,7 @@
         <div class="admin-container">
             <div class="admin-header">
                 <h2>MJ Barbershop — Панель управления</h2>
-                <button class="btn btn-outline" onclick="closeAdmin()">Выйти</button>
+                <button class="btn btn-outline" onclick="logoutAdmin()">Выйти</button>
             </div>
 
             <div class="admin-tabs">
@@ -1521,7 +1525,7 @@
                 <div class="form-group"><label>Название услуги *</label><input type="text" id="serviceName" required></div>
                 <div class="form-group"><label>Длительность (мин) *</label><input type="number" id="serviceDuration" value="30" required></div>
                 <div class="form-group"><label>Цена (₽) *</label><input type="number" id="servicePrice" required></div>
-                <div class="form-group"><label>Описание</label><textarea id="serviceDescription" rows="2" style="width:100%;padding:12px;background:var(--dark-3);border:2px solid var(--dark-4);color:var(--text);border-radius:4px;font-family:inherit;"></textarea></div>
+                <div class="form-group"><label>Описание</label><textarea id="serviceDescription" rows="2"></textarea></div>
                 <div class="image-upload">
                     <label>URL фото (прямая ссылка)</label>
                     <input type="url" id="serviceImageUrl" placeholder="https://example.com/photo.jpg">
@@ -1541,7 +1545,8 @@
                 <button class="btn-close" onclick="closeLoginModal()">×</button>
             </div>
             <div class="login-form">
-                <input type="password" id="adminPassword" placeholder="Введите пароль">
+                <input type="email" id="adminEmail" placeholder="Email администратора">
+                <input type="password" id="adminPassword" placeholder="Пароль">
                 <button class="btn btn-primary" onclick="loginAdmin()">Войти</button>
             </div>
         </div>
@@ -1550,56 +1555,131 @@
     <!-- TOAST -->
     <div class="toast" id="toast"></div>
 
-    <script>
-        // ==================== DATA ====================
-        let services = JSON.parse(localStorage.getItem('mj_services')) || [
-            { id: 1, name: 'Мужская стрижка', duration: 30, price: 400, description: 'Классическая или современная стрижка', image: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=400' },
-            { id: 2, name: 'Стрижка ножницами', duration: 30, price: 600, description: 'Премиум стрижка только ножницами', image: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400' },
-            { id: 3, name: 'Стрижка бороды', duration: 30, price: 300, description: 'Оформление и коррекция бороды', image: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=400' },
-            { id: 4, name: 'Стрижка + борода', duration: 30, price: 600, description: 'Комплекс: стрижка и оформление бороды', image: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=400' },
-            { id: 5, name: 'Стрижка одной насадкой', duration: 30, price: 300, description: 'Быстрая стрижка машинкой', image: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=400' }
-        ];
+    <script type="module">
+        // ==================== FIREBASE IMPORTS ====================
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, setDoc, query, where, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 
-        let bookings = JSON.parse(localStorage.getItem('mj_bookings')) || [];
-        let blockedDates = JSON.parse(localStorage.getItem('mj_blocked_dates')) || [];
+        const firebaseConfig = {
+            apiKey: "AIzaSyA218b06cZZLdC0rAeN8PDuFk4kK6pv2ss",
+            authDomain: "mj-barbershop-95.firebaseapp.com",
+            projectId: "mj-barbershop-95",
+            storageBucket: "mj-barbershop-95.firebasestorage.app",
+            messagingSenderId: "469649777249",
+            appId: "1:469649777249:web:09aea1da0f7ba1277e8020"
+        };
 
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // Глобальные переменные
+        let services = [];
+        let bookings = [];
+        let blockedDates = [];
         let selectedService = null, selectedDate = null, selectedTime = null;
         let calendarDate = new Date(), currentStep = 1;
 
         const workingHours = { start: 10, end: 22 };
 
-        // ==================== INIT ====================
-        function init() {
+        // ==================== ЗАГРУЗКА ДАННЫХ ====================
+        async function loadServices() {
+            const querySnapshot = await getDocs(collection(db, "services"));
+            services = [];
+            querySnapshot.forEach(doc => {
+                services.push({ id: doc.id, ...doc.data() });
+            });
+            if (services.length === 0) {
+                const defaultServices = [
+                    { name: 'Мужская стрижка', duration: 30, price: 400, description: 'Классическая или современная стрижка', image: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=400' },
+                    { name: 'Стрижка ножницами', duration: 30, price: 600, description: 'Премиум стрижка только ножницами', image: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400' },
+                    { name: 'Стрижка бороды', duration: 30, price: 300, description: 'Оформление и коррекция бороды', image: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=400' },
+                    { name: 'Стрижка + борода', duration: 30, price: 600, description: 'Комплекс: стрижка и оформление бороды', image: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=400' },
+                    { name: 'Стрижка одной насадкой', duration: 30, price: 300, description: 'Быстрая стрижка машинкой', image: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=400' }
+                ];
+                for (const s of defaultServices) {
+                    await addDoc(collection(db, "services"), s);
+                }
+                await loadServices();
+                return;
+            }
             renderServices();
             renderServiceSelect();
-            renderCalendar();
-            renderBookings();
-            renderAdminBookings();
             renderAdminServices();
-            renderBlockedDates();
-            loadHeroImage();
         }
 
-        // ==================== HEADER ====================
-        window.addEventListener('scroll', () => {
-            document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
-        });
+        async function loadBookings() {
+            const querySnapshot = await getDocs(collection(db, "bookings"));
+            bookings = [];
+            querySnapshot.forEach(doc => {
+                bookings.push({ id: doc.id, ...doc.data() });
+            });
+            renderBookings();
+            renderAdminBookings();
+            if (selectedDate) renderTimeSlots();
+        }
 
-        function toggleMenu() { document.getElementById('navLinks').classList.toggle('open'); }
+        async function loadBlockedDates() {
+            const querySnapshot = await getDocs(collection(db, "blockedDates"));
+            blockedDates = [];
+            querySnapshot.forEach(doc => {
+                blockedDates.push(doc.data().date);
+            });
+            renderCalendar();
+            renderBlockedDates();
+        }
 
-        // ==================== SERVICES ====================
+        // ==================== АДМИН АУТЕНТИФИКАЦИЯ ====================
+        async function loginAdmin() {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            if (!email || !password) {
+                showToast('Введите email и пароль', 'error');
+                return;
+            }
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                closeLoginModal();
+                document.getElementById('admin-panel').classList.add('active');
+                document.querySelector('header').style.display = 'none';
+                showToast('Добро пожаловать, админ!', 'success');
+            } catch(e) {
+                showToast('Неверный email или пароль', 'error');
+            }
+        }
+
+        function logoutAdmin() {
+            signOut(auth);
+            document.getElementById('admin-panel').classList.remove('active');
+            document.querySelector('header').style.display = 'block';
+            showToast('Вы вышли из админки', 'success');
+        }
+
+        function openAdminLogin() { 
+            document.getElementById('loginModal').classList.add('active'); 
+        }
+        
+        function closeLoginModal() { 
+            document.getElementById('loginModal').classList.remove('active'); 
+            document.getElementById('adminEmail').value = ''; 
+            document.getElementById('adminPassword').value = ''; 
+        }
+
+        // ==================== ОТРИСОВКА ====================
         function renderServices() {
             const grid = document.getElementById('servicesGrid');
+            if (!grid) return;
             grid.innerHTML = services.map(s => `
                 <div class="service-card">
-                    <img src="${s.image}" alt="${s.name}" class="service-image" onerror="this.src='https://via.placeholder.com/400x200/1a1a1a/00d455?text=MJ+Barber'">
+                    <img src="${s.image}" alt="${escapeHtml(s.name)}" class="service-image" loading="lazy" onerror="this.src='https://via.placeholder.com/400x200/1a1a1a/00d455?text=MJ+Barber'">
                     <div class="service-content">
                         <h3>${escapeHtml(s.name)}</h3>
                         <span class="duration">⏱ ${s.duration} мин</span>
                         <p>${escapeHtml(s.description || '')}</p>
                         <div class="service-footer">
                             <span class="price">${s.price} <small>₽</small></span>
-                            <button class="btn-book" onclick="bookService(${s.id})">Записаться</button>
+                            <button class="btn-book" onclick="bookService('${s.id}')">Записаться</button>
                         </div>
                     </div>
                 </div>
@@ -1608,9 +1688,10 @@
 
         function renderServiceSelect() {
             const list = document.getElementById('serviceSelectList');
+            if (!list) return;
             list.innerHTML = services.map(s => `
-                <div class="service-select-item" data-id="${s.id}" onclick="selectService(${s.id})">
-                    <img src="${s.image}" alt="${s.name}" class="service-select-img" onerror="this.src='https://via.placeholder.com/70/1a1a1a/00d455?text=✂️'">
+                <div class="service-select-item" data-id="${s.id}" onclick="selectService('${s.id}')">
+                    <img src="${s.image}" alt="${escapeHtml(s.name)}" class="service-select-img" loading="lazy" onerror="this.src='https://via.placeholder.com/70/1a1a1a/00d455?text=✂️'">
                     <div class="service-select-info">
                         <h4>${escapeHtml(s.name)}</h4>
                         <span>⏱ ${s.duration} мин</span>
@@ -1620,41 +1701,93 @@
             `).join('');
         }
 
-        function selectService(id) {
-            selectedService = services.find(s => s.id === id);
-            document.querySelectorAll('.service-select-item').forEach(el => {
-                el.classList.toggle('selected', parseInt(el.dataset.id) === id);
-            });
-            document.getElementById('btnNext1').disabled = false;
+        function renderBookings() {
+            const list = document.getElementById('bookingsList');
+            if (!list) return;
+            const today = new Date(); today.setHours(0,0,0,0);
+            const myBookings = [...bookings].sort((a,b) => new Date(a.date+'T'+a.time) - new Date(b.date+'T'+b.time));
+            if (myBookings.length === 0) {
+                list.innerHTML = `<div class="no-bookings"><span class="icon">📋</span><p>У вас пока нет записей</p><p style="font-size:0.85rem;margin-top:5px">Выберите услугу и запишитесь онлайн</p></div>`;
+                return;
+            }
+            list.innerHTML = myBookings.map(b => {
+                const bookingDate = new Date(b.date + 'T00:00:00');
+                const isPast = bookingDate < today || (bookingDate.getTime() === today.getTime() && b.time < new Date().toTimeString().slice(0,5));
+                const dayNum = bookingDate.getDate();
+                const monthName = bookingDate.toLocaleDateString('ru-RU', { month: 'short' });
+                const timeLabel = isPast ? 'Завершено' : b.time;
+                return `
+                    <div class="booking-item ${isPast ? 'past' : ''}">
+                        <div class="booking-item-date">
+                            <span class="day">${dayNum}</span>
+                            <span class="month">${monthName}</span>
+                        </div>
+                        <div class="booking-item-details">
+                            <h4>${escapeHtml(b.serviceName)}</h4>
+                            <p>🕐 ${timeLabel} • ⏱ ${b.serviceDuration} мин</p>
+                            <p class="price-tag">💰 ${b.servicePrice} ₽</p>
+                        </div>
+                        ${!isPast ? `<button class="btn-cancel" onclick="cancelBooking('${b.id}')">Отменить</button>` : ''}
+                    </div>
+                `;
+            }).join('');
         }
 
-        function bookService(id) {
-            selectedService = services.find(s => s.id === id);
-            document.querySelectorAll('.service-select-item').forEach(el => {
-                el.classList.toggle('selected', parseInt(el.dataset.id) === id);
-            });
-            document.getElementById('btnNext1').disabled = false;
-            goToStep(2);
-            document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+        function renderAdminBookings() {
+            const tbody = document.getElementById('adminBookingsList');
+            if (!tbody) return;
+            const sorted = [...bookings].sort((a,b) => new Date(b.date+'T'+b.time) - new Date(a.date+'T'+a.time));
+            if (sorted.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:30px">Нет записей</td></tr>';
+                return;
+            }
+            tbody.innerHTML = sorted.map(b => `
+                <tr>
+                    <td>${b.dateFormatted || b.date}</td>
+                    <td>${b.time}</td>
+                    <td>${escapeHtml(b.clientName)}</td>
+                    <td>${escapeHtml(b.clientPhone)}</td>
+                    <td>${escapeHtml(b.serviceName)}</td>
+                    <td>${b.servicePrice} ₽</td>
+                    <td><button class="btn-small btn-delete" onclick="adminDeleteBooking('${b.id}')">Удалить</button></td>
+                </tr>
+            `).join('');
         }
 
-        // ==================== CALENDAR ====================
+        function renderAdminServices() {
+            const tbody = document.getElementById('adminServicesList');
+            if (!tbody) return;
+            tbody.innerHTML = services.map(s => `
+                <tr>
+                    <td><img src="${s.image}" style="width:50px;height:50px;object-fit:cover;border-radius:4px" loading="lazy" onerror="this.src='https://via.placeholder.com/50/1a1a1a/00d455?text=✂️'"></td>
+                    <td>${escapeHtml(s.name)}</td>
+                    <td>${s.duration} мин</td>
+                    <td>${s.price} ₽</td>
+                    <td>
+                        <button class="btn-small btn-edit" onclick="editService('${s.id}')">Изменить</button>
+                        <button class="btn-small btn-delete" onclick="deleteService('${s.id}')">Удалить</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // ==================== КАЛЕНДАРЬ И ВРЕМЯ ====================
         const monthNames = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 
         function renderCalendar() {
             const year = calendarDate.getFullYear(), month = calendarDate.getMonth();
             const today = new Date(); today.setHours(0,0,0,0);
-
-            document.getElementById('calendarTitle').textContent = `${monthNames[month]} ${year}`;
-
+            const titleEl = document.getElementById('calendarTitle');
+            if (titleEl) titleEl.textContent = `${monthNames[month]} ${year}`;
+            
             const firstDay = new Date(year, month, 1);
             let startDay = firstDay.getDay() - 1; if (startDay < 0) startDay = 6;
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const container = document.getElementById('calendarDays');
+            if (!container) return;
+            
             let html = '';
-
             for (let i = 0; i < startDay; i++) html += '<div class="calendar-day empty"></div>';
-
             for (let d = 1; d <= daysInMonth; d++) {
                 const date = new Date(year, month, d);
                 const isPast = date < today;
@@ -1662,19 +1795,20 @@
                 const isBlocked = blockedDates.includes(dateStr);
                 const isSelected = selectedDate && dateStr === formatDateKey(selectedDate);
                 const isToday = date.getTime() === today.getTime();
-
                 let classes = 'calendar-day';
                 if (isPast || isBlocked) classes += ' disabled';
                 if (isBlocked) classes += ' blocked';
                 if (isSelected) classes += ' selected';
                 if (isToday && !isBlocked) classes += ' today';
-
                 html += `<div class="${classes}" onclick="${isPast || isBlocked ? '' : `selectDate(${year}, ${month}, ${d})`}">${d}</div>`;
             }
             container.innerHTML = html;
         }
 
-        function changeMonth(dir) { calendarDate.setMonth(calendarDate.getMonth() + dir); renderCalendar(); }
+        function changeMonth(dir) { 
+            calendarDate.setMonth(calendarDate.getMonth() + dir); 
+            renderCalendar(); 
+        }
 
         function selectDate(year, month, day) {
             selectedDate = new Date(year, month, day);
@@ -1684,11 +1818,11 @@
             checkStep2();
         }
 
-        // ==================== TIME SLOTS ====================
         function renderTimeSlots() {
             const container = document.getElementById('timeSlots');
+            if (!container) return;
             if (!selectedDate) { container.innerHTML = ''; return; }
-
+            
             const dateStr = formatDateKey(selectedDate);
             const dayBookings = bookings.filter(b => b.date === dateStr);
             const bookedTimes = dayBookings.map(b => b.time);
@@ -1698,7 +1832,7 @@
             const isToday = dateStr === todayStr;
             const currentHour = now.getHours();
             const currentMinute = now.getMinutes();
-
+            
             let html = '';
             for (let h = workingHours.start; h < workingHours.end; h++) {
                 for (let m = 0; m < 60; m += 30) {
@@ -1707,40 +1841,39 @@
                     
                     let isPastTime = false;
                     if (isToday) {
-                        if (h < currentHour) {
-                            isPastTime = true;
-                        } else if (h === currentHour && m <= currentMinute) {
-                            isPastTime = true;
-                        }
+                        if (h < currentHour) isPastTime = true;
+                        else if (h === currentHour && m <= currentMinute) isPastTime = true;
                     }
                     
                     const isSelected = selectedTime === timeStr;
                     let cls = 'time-slot';
-                    if (isBooked || isPastTime) cls += ' booked';
+                    let onclickAttr = '';
+                    if (isBooked || isPastTime) {
+                        cls += ' booked';
+                    } else {
+                        onclickAttr = `onclick="selectTime('${timeStr}')"`;
+                    }
                     if (isSelected) cls += ' selected';
-                    html += `<div class="${cls}" onclick="${isBooked || isPastTime ? '' : `selectTime('${timeStr}')`}">${timeStr}</div>`;
+                    
+                    html += `<div class="${cls}" ${onclickAttr}>${timeStr}</div>`;
                 }
             }
             container.innerHTML = html;
         }
 
-        function selectTime(time) { selectedTime = time; renderTimeSlots(); checkStep2(); }
-        function checkStep2() { document.getElementById('btnNext2').disabled = !(selectedDate && selectedTime); }
-
-        // ==================== BOOKING STEPS ====================
-        function goToStep(step) {
-            if (step === 2 && !selectedService) return;
-            if (step === 3 && (!selectedDate || !selectedTime)) { showToast('Выберите дату и время', 'error'); return; }
-            currentStep = step;
-            document.querySelectorAll('.booking-step').forEach(el => {
-                el.classList.toggle('active', parseInt(el.dataset.step) === step);
-            });
-            document.querySelectorAll('.booking-panel').forEach(p => p.classList.remove('active'));
-            document.getElementById(`panel${step}`).classList.add('active');
-            if (step === 2) renderTimeSlots();
+        function selectTime(time) { 
+            selectedTime = time; 
+            renderTimeSlots(); 
+            checkStep2(); 
+        }
+        
+        function checkStep2() { 
+            const btn = document.getElementById('btnNext2');
+            if (btn) btn.disabled = !(selectedDate && selectedTime); 
         }
 
-        function confirmBooking() {
+        // ==================== ЗАПИСЬ ====================
+        async function confirmBooking() {
             const now = new Date();
             const selectedDateTime = new Date(selectedDate);
             const [hours, minutes] = selectedTime.split(':');
@@ -1757,7 +1890,6 @@
             if (!phone) { showToast('Введите номер телефона', 'error'); return; }
 
             const booking = {
-                id: Date.now(),
                 serviceId: selectedService.id,
                 serviceName: selectedService.name,
                 servicePrice: selectedService.price,
@@ -1769,216 +1901,117 @@
                 clientPhone: phone,
                 createdAt: new Date().toISOString()
             };
-
-            bookings.push(booking);
-            localStorage.setItem('mj_bookings', JSON.stringify(bookings));
-
-            document.querySelectorAll('.booking-panel').forEach(p => p.classList.remove('active'));
-            document.getElementById('panelSuccess').classList.add('active');
-
-            renderBookings();
-            renderAdminBookings();
-            renderTimeSlots();
-            showToast('Вы успешно записаны! ✂️', 'success');
-        }
-
-        function resetBooking() {
-            selectedService = null; selectedDate = null; selectedTime = null; currentStep = 1;
-            document.getElementById('clientName').value = '';
-            document.getElementById('clientPhone').value = '';
-            document.getElementById('btnNext1').disabled = true;
-            document.getElementById('btnNext2').disabled = true;
-            document.querySelectorAll('.service-select-item').forEach(el => el.classList.remove('selected'));
-            document.querySelectorAll('.booking-step').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.booking-panel').forEach(p => p.classList.remove('active'));
-            document.querySelector('.booking-step[data-step="1"]').classList.add('active');
-            document.getElementById('panel1').classList.add('active');
-            renderCalendar();
-        }
-
-        // ==================== MY BOOKINGS ====================
-        function renderBookings() {
-            const list = document.getElementById('bookingsList');
-            const today = new Date(); today.setHours(0,0,0,0);
-
-            const myBookings = [...bookings].sort((a,b) => new Date(a.date+'T'+a.time) - new Date(b.date+'T'+b.time));
-
-            if (myBookings.length === 0) {
-                list.innerHTML = `<div class="no-bookings"><span class="icon">📋</span><p>У вас пока нет записей</p><p style="font-size:0.85rem;margin-top:5px">Выберите услугу и запишитесь онлайн</p></div>`;
-                return;
+            try {
+                await addDoc(collection(db, "bookings"), booking);
+                await loadBookings();
+                document.querySelectorAll('.booking-panel').forEach(p => p.classList.remove('active'));
+                document.getElementById('panelSuccess').classList.add('active');
+                showToast('Вы успешно записаны! ✂️', 'success');
+            } catch(e) { 
+                showToast('Ошибка при записи', 'error'); 
             }
-
-            list.innerHTML = myBookings.map(b => {
-                const bookingDate = new Date(b.date + 'T00:00:00');
-                const isPast = bookingDate < today || (bookingDate.getTime() === today.getTime() && b.time < new Date().toTimeString().slice(0,5));
-                const dayNum = bookingDate.getDate();
-                const monthName = bookingDate.toLocaleDateString('ru-RU', { month: 'short' });
-                const timeLabel = isPast ? 'Завершено' : b.time;
-                
-                return `
-                    <div class="booking-item ${isPast ? 'past' : ''}">
-                        <div class="booking-item-date">
-                            <span class="day">${dayNum}</span>
-                            <span class="month">${monthName}</span>
-                        </div>
-                        <div class="booking-item-details">
-                            <h4>${escapeHtml(b.serviceName)}</h4>
-                            <p>🕐 ${timeLabel} • ⏱ ${b.serviceDuration} мин</p>
-                            <p class="price-tag">💰 ${b.servicePrice} ₽</p>
-                        </div>
-                        ${!isPast ? `<button class="btn-cancel" onclick="cancelBooking(${b.id})">Отменить</button>` : ''}
-                    </div>
-                `;
-            }).join('');
         }
 
-        function cancelBooking(id) {
+        async function cancelBooking(id) {
             if (!confirm('Отменить запись?')) return;
-            bookings = bookings.filter(b => b.id !== id);
-            localStorage.setItem('mj_bookings', JSON.stringify(bookings));
-            renderBookings();
-            renderAdminBookings();
-            renderTimeSlots();
-            showToast('Запись отменена', 'success');
-        }
-
-        // ==================== ADMIN PANEL ====================
-        function openAdminLogin() { document.getElementById('loginModal').classList.add('active'); }
-        function closeLoginModal() {
-            document.getElementById('loginModal').classList.remove('active');
-            document.getElementById('adminPassword').value = '';
-        }
-
-        function loginAdmin() {
-            const password = document.getElementById('adminPassword').value;
-            if (password === 'majon95') {
-                closeLoginModal();
-                document.getElementById('admin-panel').classList.add('active');
-                document.querySelector('header').style.display = 'none';
-                renderAdminBookings();
-                renderAdminServices();
-                renderBlockedDates();
-                window.scrollTo(0, 0);
-                showToast('Добро пожаловать, админ!', 'success');
-            } else {
-                showToast('Неверный пароль', 'error');
+            try {
+                await deleteDoc(doc(db, "bookings", id));
+                await loadBookings();
+                showToast('Запись отменена', 'success');
+            } catch(e) { 
+                showToast('Ошибка отмены', 'error'); 
             }
         }
 
-        function closeAdmin() {
-            document.getElementById('admin-panel').classList.remove('active');
-            document.querySelector('header').style.display = 'block';
-        }
-
-        function showAdminTab(tab) {
-            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById(`tab-${tab}`).classList.add('active');
-        }
-
-        function renderAdminBookings() {
-            const tbody = document.getElementById('adminBookingsList');
-            const sorted = [...bookings].sort((a,b) => new Date(b.date+'T'+b.time) - new Date(a.date+'T'+a.time));
-            if (sorted.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:30px">Нет записей</td></tr>';
-                return;
+        async function adminDeleteBooking(id) {
+            if (!confirm('Удалить запись?')) return;
+            try {
+                await deleteDoc(doc(db, "bookings", id));
+                await loadBookings();
+                showToast('Запись удалена', 'success');
+            } catch(e) { 
+                showToast('Ошибка удаления', 'error'); 
             }
-            tbody.innerHTML = sorted.map(b => `
-                <tr>
-                    <td>${b.dateFormatted}</td><td>${b.time}</td><td>${escapeHtml(b.clientName)}</td>
-                    <td>${escapeHtml(b.clientPhone)}</td><td>${escapeHtml(b.serviceName)}</td><td>${b.servicePrice} ₽</td>
-                    <td><button class="btn-small btn-delete" onclick="adminDeleteBooking(${b.id})">Удалить</button></td>
-                </tr>
-            `).join('');
         }
 
-        function adminDeleteBooking(id) {
-            if (!confirm('Удалить эту запись?')) return;
-            bookings = bookings.filter(b => b.id !== id);
-            localStorage.setItem('mj_bookings', JSON.stringify(bookings));
-            renderAdminBookings();
-            renderBookings();
-            showToast('Запись удалена', 'success');
+        // ==================== УСЛУГИ (CRUD) ====================
+        let editingServiceId = null;
+
+        async function saveService(event) {
+            event.preventDefault();
+            const imageUrl = document.getElementById('serviceImageUrl').value;
+            const data = {
+                name: document.getElementById('serviceName').value,
+                duration: parseInt(document.getElementById('serviceDuration').value),
+                price: parseInt(document.getElementById('servicePrice').value),
+                description: document.getElementById('serviceDescription').value,
+                image: imageUrl || 'https://via.placeholder.com/400x200/1a1a1a/00d455?text=MJ+Barber'
+            };
+            try {
+                if (editingServiceId) {
+                    await setDoc(doc(db, "services", editingServiceId), data);
+                } else {
+                    await addDoc(collection(db, "services"), data);
+                }
+                await loadServices();
+                closeServiceModal();
+                showToast('Услуга сохранена', 'success');
+            } catch(e) { 
+                showToast('Ошибка сохранения', 'error'); 
+            }
         }
 
-        // ==================== ADMIN SERVICES ====================
-        function renderAdminServices() {
-            const tbody = document.getElementById('adminServicesList');
-            tbody.innerHTML = services.map(s => `
-                <tr>
-                    <td><img src="${s.image}" style="width:50px;height:50px;object-fit:cover;border-radius:4px" onerror="this.src='https://via.placeholder.com/50/1a1a1a/00d455?text=✂️'"></td>
-                    <td>${escapeHtml(s.name)}</td><td>${s.duration} мин</td><td>${s.price} ₽</td>
-                    <td>
-                        <button class="btn-small btn-edit" onclick="editService(${s.id})">Изменить</button>
-                        <button class="btn-small btn-delete" onclick="deleteService(${s.id})">Удалить</button>
-                    </td>
-                </tr>
-            `).join('');
+        async function deleteService(id) {
+            if (!confirm('Удалить услугу?')) return;
+            try {
+                await deleteDoc(doc(db, "services", id));
+                await loadServices();
+                showToast('Услуга удалена', 'success');
+            } catch(e) { 
+                showToast('Ошибка удаления', 'error'); 
+            }
         }
 
         function openServiceModal(serviceId = null) {
+            editingServiceId = serviceId;
             const modal = document.getElementById('serviceModal');
             const form = document.getElementById('serviceForm');
+            form.reset();
+            document.getElementById('imagePreview').innerHTML = '<span style="color:var(--text-muted)">Фото не выбрано</span>';
+            document.getElementById('serviceImageUrl').value = '';
+            
             if (serviceId) {
-                const s = services.find(x => x.id === serviceId);
-                document.getElementById('modalTitle').textContent = 'Изменить услугу';
-                document.getElementById('serviceId').value = s.id;
-                document.getElementById('serviceName').value = s.name;
-                document.getElementById('serviceDuration').value = s.duration;
-                document.getElementById('servicePrice').value = s.price;
-                document.getElementById('serviceDescription').value = s.description || '';
-                document.getElementById('serviceImageUrl').value = s.image || '';
-                document.getElementById('imagePreview').innerHTML = s.image ? `<img src="${s.image}" onerror="this.parentElement.innerHTML='<span style=\"color:var(--text-muted)\">Ошибка загрузки</span>'">` : '<span style="color:var(--text-muted)">Фото не выбрано</span>';
+                const s = services.find(s => s.id === serviceId);
+                if (s) {
+                    document.getElementById('modalTitle').textContent = 'Изменить услугу';
+                    document.getElementById('serviceId').value = s.id;
+                    document.getElementById('serviceName').value = s.name;
+                    document.getElementById('serviceDuration').value = s.duration;
+                    document.getElementById('servicePrice').value = s.price;
+                    document.getElementById('serviceDescription').value = s.description || '';
+                    document.getElementById('serviceImageUrl').value = s.image || '';
+                    if (s.image) {
+                        document.getElementById('imagePreview').innerHTML = `<img src="${s.image}" style="max-width:100%;max-height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='<span style=\"color:var(--text-muted)\">Ошибка</span>'">`;
+                    }
+                }
             } else {
                 document.getElementById('modalTitle').textContent = 'Добавить услугу';
-                form.reset();
                 document.getElementById('serviceId').value = '';
-                document.getElementById('imagePreview').innerHTML = '<span style="color:var(--text-muted)">Фото не выбрано</span>';
             }
             modal.classList.add('active');
         }
 
-        function closeServiceModal() { document.getElementById('serviceModal').classList.remove('active'); }
-
-        document.getElementById('serviceForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const id = document.getElementById('serviceId').value;
-            const imageUrl = document.getElementById('serviceImageUrl').value;
-            const serviceData = {
-                id: id ? parseInt(id) : Date.now(),
-                name: document.getElementById('serviceName').value,
-                duration: parseInt(document.getElementById('serviceDuration').value) || 30,
-                price: parseInt(document.getElementById('servicePrice').value),
-                description: document.getElementById('serviceDescription').value,
-                image: imageUrl || 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=400'
-            };
-            if (id) {
-                const index = services.findIndex(s => s.id === parseInt(id));
-                services[index] = serviceData;
-            } else { services.push(serviceData); }
-            localStorage.setItem('mj_services', JSON.stringify(services));
-            closeServiceModal();
-            renderServices(); renderServiceSelect(); renderAdminServices();
-            showToast('Услуга сохранена', 'success');
-        });
-
-        function editService(id) { openServiceModal(id); }
-        function deleteService(id) {
-            if (!confirm('Удалить эту услугу?')) return;
-            services = services.filter(s => s.id !== id);
-            localStorage.setItem('mj_services', JSON.stringify(services));
-            renderServices(); renderServiceSelect(); renderAdminServices();
-            showToast('Услуга удалена', 'success');
+        function closeServiceModal() { 
+            document.getElementById('serviceModal').classList.remove('active'); 
         }
 
-        // ==================== HERO IMAGE ====================
+        // ==================== ГЛАВНОЕ ФОТО ====================
         function saveHeroImage() {
             const url = document.getElementById('heroImageUrl').value.trim();
             if (!url) { showToast('Введите ссылку на фото', 'error'); return; }
             localStorage.setItem('heroImage', url);
             document.getElementById('heroImage').src = url;
-            document.getElementById('heroPreview').innerHTML = `<img src="${url}" style="max-width:100%;max-height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='<span style=\"color:var(--text-muted)\">Ошибка загрузки</span>'">`;
+            document.getElementById('heroPreview').innerHTML = `<img src="${url}" style="max-width:100%;max-height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='<span style=\"color:var(--text-muted)\">Ошибка</span>'">`;
             showToast('Главное фото обновлено!', 'success');
         }
 
@@ -1987,13 +2020,38 @@
             if (url) {
                 document.getElementById('heroImage').src = url;
                 document.getElementById('heroImageUrl').value = url;
-                document.getElementById('heroPreview').innerHTML = `<img src="${url}" style="max-width:100%;max-height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='<span style=\"color:var(--text-muted)\">Ошибка загрузки</span>'">`;
+                document.getElementById('heroPreview').innerHTML = `<img src="${url}" style="max-width:100%;max-height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='<span style=\"color:var(--text-muted)\">Ошибка</span>'">`;
             }
         }
 
-        // ==================== BLOCKED DATES ====================
+        // ==================== БЛОКИРОВКА ДАТ ====================
+        async function addBlockedDate() {
+            const date = document.getElementById('blockDateInput').value;
+            if (!date) { showToast('Выберите дату', 'error'); return; }
+            if (blockedDates.includes(date)) { showToast('Дата уже заблокирована', 'error'); return; }
+            try {
+                await addDoc(collection(db, "blockedDates"), { date });
+                await loadBlockedDates();
+                showToast('Дата заблокирована', 'success');
+                document.getElementById('blockDateInput').value = '';
+            } catch(e) { 
+                showToast('Ошибка', 'error'); 
+            }
+        }
+
+        async function removeBlockedDate(date) {
+            const q = query(collection(db, "blockedDates"), where("date", "==", date));
+            const snap = await getDocs(q);
+            for (const docSnap of snap.docs) {
+                await deleteDoc(doc(db, "blockedDates", docSnap.id));
+            }
+            await loadBlockedDates();
+            showToast('Дата разблокирована', 'success');
+        }
+
         function renderBlockedDates() {
             const container = document.getElementById('blockedDatesList');
+            if (!container) return;
             if (blockedDates.length === 0) {
                 container.innerHTML = '<p style="color:var(--text-muted)">Нет заблокированных дат</p>';
                 return;
@@ -2005,26 +2063,16 @@
             }).join('');
         }
 
-        function addBlockedDate() {
-            const dateInput = document.getElementById('blockDateInput').value;
-            if (!dateInput) { showToast('Выберите дату', 'error'); return; }
-            if (blockedDates.includes(dateInput)) { showToast('Эта дата уже заблокирована', 'error'); return; }
-            blockedDates.push(dateInput);
-            localStorage.setItem('mj_blocked_dates', JSON.stringify(blockedDates));
-            renderBlockedDates(); renderCalendar();
-            showToast('Дата заблокирована', 'success');
-            document.getElementById('blockDateInput').value = '';
+        // ==================== ВСПОМОГАТЕЛЬНЫЕ ====================
+        function escapeHtml(str) { 
+            if (!str) return ''; 
+            return str.replace(/[&<>]/g, function(m) { 
+                if (m === '&') return '&amp;'; 
+                if (m === '<') return '&lt;'; 
+                if (m === '>') return '&gt;'; 
+                return m; 
+            }); 
         }
-
-        function removeBlockedDate(date) {
-            blockedDates = blockedDates.filter(d => d !== date);
-            localStorage.setItem('mj_blocked_dates', JSON.stringify(blockedDates));
-            renderBlockedDates(); renderCalendar();
-            showToast('Дата разблокирована', 'success');
-        }
-
-        // ==================== HELPERS ====================
-        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
         
         function formatDateKey(date) {
             const y = date.getFullYear();
@@ -2040,7 +2088,71 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // Phone mask
+        function toggleMenu() { 
+            document.getElementById('navLinks').classList.toggle('open'); 
+        }
+
+        function goToStep(step) {
+            if (step === 2 && !selectedService) {
+                showToast('Выберите услугу', 'error');
+                return;
+            }
+            if (step === 3 && (!selectedDate || !selectedTime)) {
+                showToast('Выберите дату и время', 'error');
+                return;
+            }
+            document.querySelectorAll('.booking-step').forEach(el => {
+                el.classList.toggle('active', parseInt(el.dataset.step) === step);
+            });
+            document.querySelectorAll('.booking-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(`panel${step}`).classList.add('active');
+            if (step === 2) renderTimeSlots();
+        }
+
+        function resetBooking() {
+            selectedService = null; selectedDate = null; selectedTime = null;
+            document.getElementById('clientName').value = '';
+            document.getElementById('clientPhone').value = '';
+            const btn1 = document.getElementById('btnNext1');
+            const btn2 = document.getElementById('btnNext2');
+            if (btn1) btn1.disabled = true;
+            if (btn2) btn2.disabled = true;
+            document.querySelectorAll('.service-select-item').forEach(el => el.classList.remove('selected'));
+            document.querySelectorAll('.booking-step').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.booking-panel').forEach(p => p.classList.remove('active'));
+            const firstStep = document.querySelector('.booking-step[data-step="1"]');
+            if (firstStep) firstStep.classList.add('active');
+            document.getElementById('panel1').classList.add('active');
+            renderCalendar();
+        }
+
+        function selectService(id) {
+            selectedService = services.find(s => s.id === id);
+            document.querySelectorAll('.service-select-item').forEach(el => {
+                el.classList.toggle('selected', el.dataset.id === id);
+            });
+            const btn = document.getElementById('btnNext1');
+            if (btn) btn.disabled = false;
+        }
+
+        function bookService(id) {
+            selectService(id);
+            goToStep(2);
+            document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function editService(id) { 
+            openServiceModal(id); 
+        }
+
+        function showAdminTab(tab) {
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+        }
+
+        // Маска телефона
         document.getElementById('clientPhone')?.addEventListener('input', function(e) {
             let val = e.target.value.replace(/\D/g,'');
             if (val.length > 0) {
@@ -2054,8 +2166,52 @@
             }
         });
 
-        // ==================== INIT ====================
+        // Обработчик формы услуги
+        document.getElementById('serviceForm').addEventListener('submit', saveService);
+
+        // Инициализация
+        async function init() {
+            await loadServices();
+            await loadBookings();
+            await loadBlockedDates();
+            renderCalendar();
+            loadHeroImage();
+        }
+        
         init();
+
+        // Подписка на реальные изменения
+        onSnapshot(collection(db, "services"), () => loadServices());
+        onSnapshot(collection(db, "bookings"), () => loadBookings());
+        onSnapshot(collection(db, "blockedDates"), () => loadBlockedDates());
+
+        window.addEventListener('scroll', () => {
+            document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Привязка функций к window
+        window.selectDate = selectDate;
+        window.selectTime = selectTime;
+        window.bookService = bookService;
+        window.selectService = selectService;
+        window.cancelBooking = cancelBooking;
+        window.adminDeleteBooking = adminDeleteBooking;
+        window.editService = editService;
+        window.deleteService = deleteService;
+        window.addBlockedDate = addBlockedDate;
+        window.removeBlockedDate = removeBlockedDate;
+        window.loginAdmin = loginAdmin;
+        window.logoutAdmin = logoutAdmin;
+        window.openAdminLogin = openAdminLogin;
+        window.closeLoginModal = closeLoginModal;
+        window.goToStep = goToStep;
+        window.resetBooking = resetBooking;
+        window.confirmBooking = confirmBooking;
+        window.changeMonth = changeMonth;
+        window.toggleMenu = toggleMenu;
+        window.showAdminTab = showAdminTab;
+        window.closeServiceModal = closeServiceModal;
+        window.saveHeroImage = saveHeroImage;
     </script>
 </body>
 </html>
