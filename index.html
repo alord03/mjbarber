@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>MJ Barbershop — Создаю стиль, подчеркивающий вашу индивидуальность</title>
+    <title>MAJID Barbershop — Создаю стиль, подчеркивающий вашу индивидуальность</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
 
@@ -1301,7 +1301,7 @@
     <!-- HEADER -->
     <header id="header">
         <nav>
-            <a href="#" class="logo">MJ BARBERSHOP</a>
+            <a href="#" class="logo">MAJID BARBERSHOP</a>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#services">Услуги</a></li>
                 <li><a href="#booking">Записаться</a></li>
@@ -1436,12 +1436,12 @@
     <!-- FOOTER -->
     <footer>
         <div class="footer-content">
-            <h3>MJ Barbershop</h3>
+            <h3>MAJID Barbershop</h3>
             <p>📍 МО, муниципальный округ Истра, д. Захарово, Речная улица, 1</p>
             <p><a href="tel:+79879253693">📞 +7 (987) 925-36-93</a></p>
             <p>🕐 Ежедневно: 10:00 - 22:00</p>
             <div class="footer-bottom">
-                <p>© 2026 MJ Barbershop. Все права защищены.</p>
+                <p>© 2026 MAJID Barbershop. Все права защищены.</p>
             </div>
         </div>
     </footer>
@@ -1450,7 +1450,7 @@
     <div id="admin-panel">
         <div class="admin-container">
             <div class="admin-header">
-                <h2>MJ Barbershop — Панель управления</h2>
+                <h2>MAJID Barbershop — Панель управления</h2>
                 <button class="btn btn-outline" onclick="logoutAdmin()">Выйти</button>
             </div>
 
@@ -1572,7 +1572,6 @@
         };
 
         // ==================== TELEGRAM НАСТРОЙКИ ====================
-        // 🔑 ЗАМЕНИТЕ НА ВАШИ ДАННЫЕ!
         const TELEGRAM_BOT_TOKEN = "8429313460:AAHsxt4ME11cY5sxcnDVG-oe2U53OGdpCSc";
         const TELEGRAM_CHAT_ID = "8386352555";
 
@@ -1597,25 +1596,60 @@
             return text.replace(/[_*[\]()~`>#+\-=|{}.!]/g, '\\$&');
         }
 
-        async function sendTelegramNotification(booking) {
-            if (TELEGRAM_BOT_TOKEN === "ВАШ_ТОКЕН_ОТ_BOTFATHER" || TELEGRAM_BOT_TOKEN === "") {
-                console.warn('⚠️ Telegram не настроен. Замените TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID на свои!');
+        // Форматирование даты в дд.мм.гг
+        function formatDateForTelegram(dateStr) {
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return dateStr;
+            return `${parts[2]}.${parts[1]}.${parts[0].slice(-2)}`;
+        }
+
+        // Очистка номера телефона от лишних пробелов и дефисов
+        function cleanPhoneForTelegram(phone) {
+            if (!phone) return '';
+            // Убираем все пробелы и дефисы, оставляем только +7 и цифры
+            let cleaned = phone.replace(/[\s\-]/g, '');
+            return cleaned;
+        }
+
+        async function sendTelegramNotification(booking, isCancel = false) {
+            if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === "") {
+                console.warn('⚠️ Telegram не настроен.');
                 return false;
             }
             
-            const message = `🪒✂️ *НОВАЯ ЗАПИСЬ В BARBERSHOP!* ✂️🪒
-        
+            const formattedDate = formatDateForTelegram(booking.date);
+            const cleanedPhone = cleanPhoneForTelegram(booking.clientPhone);
+            
+            let message = '';
+            if (isCancel) {
+                message = `❌ *ОТМЕНА ЗАПИСИ* ❌
+                
 ┌─────────────────────────┐
 │ 👤 *Клиент:* ${escapeTelegram(booking.clientName)}
-│ 📞 *Телефон:* ${escapeTelegram(booking.clientPhone)}
+│ 📞 *Телефон:* ${escapeTelegram(cleanedPhone)}
 │ ✂️ *Услуга:* ${escapeTelegram(booking.serviceName)}
 │ ⏱ *Длительность:* ${booking.serviceDuration} мин
 │ 💰 *Цена:* ${booking.servicePrice} ₽
-│ 📅 *Дата:* ${booking.date}
+│ 📅 *Дата:* ${formattedDate}
 │ ⏰ *Время:* ${booking.time}
 └─────────────────────────┘
-        
+                
+⚠️ Запись была отменена клиентом.`;
+            } else {
+                message = `🪒✂️ *НОВАЯ ЗАПИСЬ В BARBERSHOP!* ✂️🪒
+                
+┌─────────────────────────┐
+│ 👤 *Клиент:* ${escapeTelegram(booking.clientName)}
+│ 📞 *Телефон:* ${escapeTelegram(cleanedPhone)}
+│ ✂️ *Услуга:* ${escapeTelegram(booking.serviceName)}
+│ ⏱ *Длительность:* ${booking.serviceDuration} мин
+│ 💰 *Цена:* ${booking.servicePrice} ₽
+│ 📅 *Дата:* ${formattedDate}
+│ ⏰ *Время:* ${booking.time}
+└─────────────────────────┘
+                
 🔔 Требуется подтверждение!`;
+            }
             
             try {
                 const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
@@ -1628,7 +1662,7 @@
                     })
                 });
                 if (response.ok) {
-                    console.log('✅ Уведомление в Telegram отправлено');
+                    console.log(isCancel ? '✅ Уведомление об отмене в Telegram отправлено' : '✅ Уведомление в Telegram отправлено');
                     return true;
                 } else {
                     const error = await response.json();
@@ -1799,17 +1833,21 @@
                 tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:30px">Нет записей</td></tr>';
                 return;
             }
-            tbody.innerHTML = sorted.map(b => `
-                <tr>
-                    <td>${b.dateFormatted || b.date}</td>
-                    <td>${b.time}</td>
-                    <td>${escapeHtml(b.clientName)}</td>
-                    <td>${escapeHtml(b.clientPhone)}</td>
-                    <td>${escapeHtml(b.serviceName)}</td>
-                    <td>${b.servicePrice} ₽</td>
-                    <td><button class="btn-small btn-delete" onclick="adminDeleteBooking('${b.id}')">Удалить</button></td>
-                </tr>
-            `).join('');
+            tbody.innerHTML = sorted.map(b => {
+                const dateObj = new Date(b.date);
+                const formattedDate = dateObj.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit' });
+                return `
+                    <tr>
+                        <td>${formattedDate}</td>
+                        <td>${b.time}</td>
+                        <td>${escapeHtml(b.clientName)}</td>
+                        <td>${escapeHtml(b.clientPhone)}</td>
+                        <td>${escapeHtml(b.serviceName)}</td>
+                        <td>${b.servicePrice} ₽</td>
+                        <td><button class="btn-small btn-delete" onclick="adminDeleteBooking('${b.id}')">Удалить</button></td>
+                    </tr>
+                `;
+            }).join('');
         }
 
         function renderAdminServices() {
@@ -1819,7 +1857,8 @@
                 <tr>
                     <td><img src="${s.image}" style="width:50px;height:50px;object-fit:cover;border-radius:4px" loading="lazy" onerror="this.src='https://via.placeholder.com/50/1a1a1a/00d455?text=✂️'"></td>
                     <td>${escapeHtml(s.name)}</td>
-                    <td>${s.duration} мин</td><td>${s.price} ₽</td>
+                    <td>${s.duration} мин</td>
+                    <td>${s.price} ₽</td>
                     <td>
                         <button class="btn-small btn-edit" onclick="editService('${s.id}')">Изменить</button>
                         <button class="btn-small btn-delete" onclick="deleteService('${s.id}')">Удалить</button>
@@ -1941,7 +1980,7 @@
             if (btn) btn.disabled = !(selectedDate && selectedTime); 
         }
 
-        // ==================== ЗАПИСЬ (С TELEGRAM) ====================
+        // ==================== ЗАПИСЬ ====================
         async function confirmBooking() {
             const now = new Date();
             const selectedDateTime = new Date(selectedDate);
@@ -1972,13 +2011,9 @@
             };
             
             try {
-                // Сохраняем запись в Firebase
                 await addDoc(collection(db, "bookings"), booking);
                 await loadBookings();
-                
-                // ========== ОТПРАВЛЯЕМ УВЕДОМЛЕНИЕ В TELEGRAM ==========
-                await sendTelegramNotification(booking);
-                // =====================================================
+                await sendTelegramNotification(booking, false);
                 
                 document.querySelectorAll('.booking-panel').forEach(p => p.classList.remove('active'));
                 document.getElementById('panelSuccess').classList.add('active');
@@ -1992,10 +2027,15 @@
         async function cancelBooking(id) {
             if (!confirm('Отменить запись?')) return;
             try {
+                const bookingToCancel = bookings.find(b => b.id === id);
                 await deleteDoc(doc(db, "bookings", id));
                 await loadBookings();
+                if (bookingToCancel) {
+                    await sendTelegramNotification(bookingToCancel, true);
+                }
                 showToast('Запись отменена', 'success');
             } catch(e) { 
+                console.error(e);
                 showToast('Ошибка отмены', 'error'); 
             }
         }
@@ -2003,8 +2043,12 @@
         async function adminDeleteBooking(id) {
             if (!confirm('Удалить запись?')) return;
             try {
+                const bookingToCancel = bookings.find(b => b.id === id);
                 await deleteDoc(doc(db, "bookings", id));
                 await loadBookings();
+                if (bookingToCancel) {
+                    await sendTelegramNotification(bookingToCancel, true);
+                }
                 showToast('Запись удалена', 'success');
             } catch(e) { 
                 showToast('Ошибка удаления', 'error'); 
@@ -2090,8 +2134,6 @@
             const url = document.getElementById('heroImageUrl').value.trim();
             if (!url) { showToast('Введите ссылку на фото', 'error'); return; }
             
-            // Сохраняем URL главного фото в отдельной коллекции или в localStorage
-            // Для простоты используем localStorage, так как это не критичные данные
             localStorage.setItem('heroImage', url);
             document.getElementById('heroImage').src = url;
             document.getElementById('heroPreview').innerHTML = `<img src="${url}" style="max-width:100%;max-height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='<span style=\"color:var(--text-muted)\">Ошибка</span>'">`;
